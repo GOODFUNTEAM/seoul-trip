@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>孤芳小隊海外大冒險 — 搜ㄦ篇</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇰🇷</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;700;900&family=DM+Mono:wght@400;500&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,900;1,600&display=swap');
+
+/* ═══════════════════════════════════════
+   VARIABLES
+═══════════════════════════════════════ */
+:root {
+  --ink:     #111010;
+  --white:   #FAFAF8;
+  --yellow:  #FFE600;
+  --orange:  #FF6B00;
+  --red:     #E8001C;
+  --muted:   #777470;
+  --border:  #111010;
+  --rule:    1.5px solid #111010;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-cond:    'Barlow Condensed', sans-serif;
+  --font-body:    'Noto Sans KR', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  --radius: 0px;
+  --transition: 0.18s ease;
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+img { display: block; max-width: 100%; }
+
+/* ═══════════════════════════════════════
+   HEADER / NAV
+═══════════════════════════════════════ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  border-bottom: var(--rule);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 52px;
+  border-bottom: var(--rule);
+}
+
+.site-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+.site-logo span { color: var(--orange); }
+
+.header-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* Weather Widget */
+.weather-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border: var(--rule);
+  background: var(--yellow);
+}
+.weather-widget .temp { font-size: 15px; font-weight: 500; }
+
+/* Day Nav */
+.day-nav {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.day-nav::-webkit-scrollbar { display: none; }
+
+.day-tab {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px 8px;
+  border-right: var(--rule);
+  cursor: pointer;
+  transition: background var(--transition);
+  gap: 2px;
+  min-width: 80px;
+}
+.day-tab:hover { background: var(--yellow); }
+.day-tab.active { background: var(--yellow); }
+
+.day-tab-label {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1;
+}
+.day-tab-date {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.day-tab-theme {
+  font-family: var(--font-cond);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tab-home {
+  min-width: 60px;
+  border-right: var(--rule);
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: var(--rule);
+  min-height: 280px;
+}
+
+.hero-left {
+  padding: 40px 32px;
+  border-right: var(--rule);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 8vw, 88px);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--orange);
+  display: block;
+}
+
+.hero-sub {
+  font-family: var(--font-cond);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.hero-right {
+  background: var(--yellow);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-right::before {
+  content: 'SEOUL';
+  position: absolute;
+  bottom: -20px;
+  right: -10px;
+  font-family: var(--font-display);
+  font-size: 120px;
+  color: rgba(0,0,0,0.06);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.hero-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.hero-info-item {}
+.hero-info-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.45);
+  margin-bottom: 3px;
+}
+.hero-info-value {
+  font-family: var(--font-cond);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1.5px solid var(--ink);
+  background: white;
+}
+
+/* ═══════════════════════════════════════
+   VIEWS
+═══════════════════════════════════════ */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ═══════════════════════════════════════
+   OVERVIEW (Home)
+═══════════════════════════════════════ */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: var(--rule);
+}
+
+.overview-card {
+  padding: 20px 16px;
+  border-right: var(--rule);
+  cursor: pointer;
+  transition: background var(--transition);
+  position: relative;
+}
+.overview-card:last-child { border-right: none; }
+.overview-card:hover { background: #F5F5F0; }
+
+.overview-card-day {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 0.9;
+  margin-bottom: 4px;
+}
+.overview-card-date {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.overview-card-theme {
+  font-family: var(--font-cond);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.overview-card-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.overview-card-count {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.overview-card.highlight-day {
+  background: var(--yellow);
+}
+.overview-card.highlight-day:hover {
+  background: #FFD900;
+}
+
+/* ═══════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════ */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: var(--rule);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 0.02em;
+}
+.section-title span { color: var(--orange); }
+
+.section-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   SPOT CARDS
+═══════════════════════════════════════ */
+.spots-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  border-top: var(--rule);
+}
+
+.spot-card {
+  border-right: var(--rule);
+  border-bottom: var(--rule);
+  padding: 16px;
+  position: relative;
+  transition: background var(--transition);
+}
+.spot-card:hover { background: #F9F9F6; }
+.spot-card.checked { background: #F0F0EC; }
+.spot-card.checked .spot-name { text-decoration: line-through; color: var(--muted); }
+
+.spot-card.highlight {
+  background: var(--yellow);
+}
+.spot-card.highlight:hover { background: #FFD900; }
+.spot-card.highlight.checked { background: #E8E0A0; }
+
+.spot-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.spot-emoji {
+  font-size: 20px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spot-name {
+  font-family: var(--font-cond);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.spot-name-kr {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 1px;
+}
+
+.spot-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.spot-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.spot-status .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ccc;
+}
+.spot-status.open .dot  { background: #22C55E; }
+.spot-status.closed .dot { background: #EF4444; }
+
+.spot-hours {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.spot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.spot-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid rgba(0,0,0,0.2);
+  color: var(--muted);
+}
+
+.spot-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border: 1.5px solid var(--ink);
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn:hover { background: var(--ink); color: white; }
+
+.btn-check {
+  background: var(--ink);
+  color: white;
+}
+.btn-check:hover { background: #333; }
+.spot-card.checked .btn-check { background: #888; }
+.spot-card.checked .btn-check:hover { background: var(--red); }
+
+.btn-map-g { border-color: #4285F4; color: #4285F4; }
+.btn-map-g:hover { background: #4285F4; color: white; }
+.btn-map-k { border-color: #FFCD00; color: #333; background: #FFCD00; }
+.btn-map-k:hover { background: #E5B800; border-color: #E5B800; }
+
+/* ═══════════════════════════════════════
+   MAP MODAL
+═══════════════════════════════════════ */
+.map-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.map-modal-overlay.open { display: flex; }
+
+.map-modal {
+  background: white;
+  border: var(--rule);
+  padding: 28px;
+  min-width: 320px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.map-modal-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+.map-modal-kr {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.map-btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.map-big-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 12px;
+  border: var(--rule);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.map-big-btn svg { width: 24px; height: 24px; }
+.map-big-btn.google:hover { background: #4285F4; color: white; }
+.map-big-btn.kakao { background: var(--yellow); }
+.map-big-btn.kakao:hover { background: #FFD900; }
+
+.map-modal-close {
+  width: 100%;
+  padding: 10px;
+  border: var(--rule);
+  background: white;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.map-modal-close:hover { background: #F0F0EC; }
+
+/* ═══════════════════════════════════════
+   PHRASES PAGE
+═══════════════════════════════════════ */
+.phrases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  border-top: var(--rule);
+}
+
+.phrase-card {
+  border-right: var(--rule);
+  border-bottom: var(--rule);
+  cursor: pointer;
+  perspective: 600px;
+  height: 130px;
+}
+
+.phrase-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.phrase-card.flipped .phrase-inner {
+  transform: rotateY(180deg);
+}
+
+.phrase-front, .phrase-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+}
+
+.phrase-front { background: white; }
+.phrase-back  { background: var(--yellow); transform: rotateY(180deg); }
+
+.phrase-zh-text {
+  font-family: var(--font-cond);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.phrase-hint {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.phrase-kr-text {
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.phrase-roman-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #555;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════
+   TRANSPORT PAGE
+═══════════════════════════════════════ */
+.transport-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: var(--rule);
+}
+
+.transport-block {
+  padding: 24px 20px;
+  border-right: var(--rule);
+  border-bottom: var(--rule);
+}
+.transport-block:nth-child(even) { border-right: none; }
+
+.transport-block-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+.transport-block-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.flight-card {
+  border: var(--rule);
+  padding: 14px;
+  background: var(--yellow);
+  margin-bottom: 10px;
+}
+.flight-number {
+  font-family: var(--font-display);
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+.flight-route {
+  font-family: var(--font-cond);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.flight-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #555;
+}
+
+.card-info {
+  border: var(--rule);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.card-info-title {
+  font-family: var(--font-cond);
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.card-info-price {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+.card-info-note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.warning-box {
+  border: 2px solid var(--red);
+  padding: 10px 12px;
+  background: rgba(232,0,28,0.05);
+}
+.warning-box p {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  line-height: 1.7;
+}
+
+.metro-list { display: flex; flex-direction: column; gap: 6px; }
+.metro-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: var(--rule);
+}
+.metro-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 6px;
+  color: white;
+  flex-shrink: 0;
+  min-width: 60px;
+  text-align: center;
+}
+.metro-spots {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════ */
+.progress-bar-section {
+  padding: 12px 20px;
+  border-bottom: var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.progress-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.progress-track {
+  flex: 1;
+  height: 6px;
+  background: #E5E5E0;
+  border: 1px solid var(--ink);
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--yellow);
+  transition: width 0.4s ease;
+}
+.progress-count {
+  font-family: var(--font-display);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.site-footer {
+  border-top: var(--rule);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+.footer-logo span { color: var(--orange); }
+.footer-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-align: right;
+  line-height: 1.8;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 24px 16px; }
+  .hero-right { padding: 20px 16px; min-height: 200px; }
+  .overview-grid { grid-template-columns: repeat(3, 1fr); }
+  .transport-grid { grid-template-columns: 1fr; }
+  .transport-block { border-right: none; }
+  .header-top { padding: 0 12px; }
+  .spots-list { grid-template-columns: 1fr; }
+  .phrases-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .overview-grid { grid-template-columns: 1fr 1fr; }
+  .hero-title { font-size: 48px; }
+  .day-tab { min-width: 64px; padding: 8px 10px 6px; }
+}
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.view.active { animation: fadeIn 0.22s ease; }
+
+.spot-card {
+  animation: fadeIn 0.2s ease both;
+}
+
+/* stagger */
+.spot-card:nth-child(1)  { animation-delay: 0.02s; }
+.spot-card:nth-child(2)  { animation-delay: 0.04s; }
+.spot-card:nth-child(3)  { animation-delay: 0.06s; }
+.spot-card:nth-child(4)  { animation-delay: 0.08s; }
+.spot-card:nth-child(5)  { animation-delay: 0.10s; }
+.spot-card:nth-child(6)  { animation-delay: 0.12s; }
+.spot-card:nth-child(7)  { animation-delay: 0.14s; }
+.spot-card:nth-child(8)  { animation-delay: 0.16s; }
+.spot-card:nth-child(9)  { animation-delay: 0.18s; }
+.spot-card:nth-child(10) { animation-delay: 0.20s; }
+</style>
+</head>
+<body>
+  <header id="site-header" class="site-header"></header>
+  <section id="hero"></section>
+  <main id="main"></main>
+  <footer class="site-footer">
+    <div class="footer-logo">孤芳<span>ㄦ</span></div>
+    <div class="footer-meta">
+      孤芳小隊海外大冒險 · 搜ㄦ篇<br>
+      MAY 08–12, 2026 · 弘大 BASE CAMP
+    </div>
+  </footer>
+  <script>
+const TRIP_DATA = {
+  meta: {
+    title: "孤芳小隊海外大冒險",
+    subtitle: "搜ㄦ篇",
+    dates: "MAY 08–12, 2026",
+    base: "弘大 Hongdae",
+    flights: { out: "BR170", back: "TR873" }
+  },
+
+  days: [
+    {
+      id: "d1",
+      label: "D1",
+      date: "5/8",
+      day: "FRI",
+      theme: "聖水日",
+      color: "#FF6B00",
+      emoji: "🏙️",
+      desc: "抵達首爾！先衝聖水探索選物店、書店、跑步選品。",
+      spots: [
+        {
+          id: "d1-01",
+          name: "Honghwadon",
+          nameKr: "홍화돈",
+          category: "food",
+          emoji: "🥩",
+          desc: "聖水人氣烤肉，午餐首選",
+          hours: "11:30–22:00",
+          closed: "週一",
+          lat: 37.5448, lng: 127.0557,
+          tags: ["烤肉", "午餐"]
+        },
+        {
+          id: "d1-02",
+          name: "ANGLAN",
+          nameKr: "앙글란",
+          category: "shop",
+          emoji: "🛍️",
+          desc: "聖水人氣選物店",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5443, lng: 127.0563,
+          tags: ["選物", "雜貨"]
+        },
+        {
+          id: "d1-03",
+          name: "goodrunner 서울숲점",
+          nameKr: "굿러너컴퍼니 서울숲점",
+          category: "shop",
+          emoji: "👟",
+          desc: "跑步用品老屋選物，稀有跑鞋聖地",
+          hours: "12:00–20:00",
+          closed: "週二",
+          lat: 37.5455, lng: 127.0472,
+          tags: ["跑步", "運動", "選品"]
+        },
+        {
+          id: "d1-04",
+          name: "쎄임더스트",
+          nameKr: "쎄임더스트",
+          category: "shop",
+          emoji: "📚",
+          desc: "阿斗啊獨立書店，設計感十足",
+          hours: "13:00–20:00",
+          closed: "週一",
+          lat: 37.5441, lng: 127.0558,
+          tags: ["書店", "獨立"]
+        },
+        {
+          id: "d1-05",
+          name: "Rockfish",
+          nameKr: "록피쉬",
+          category: "shop",
+          emoji: "🎽",
+          desc: "聖水選物店",
+          hours: "12:00–20:00",
+          closed: "無",
+          lat: 37.5446, lng: 127.0561,
+          tags: ["選物"]
+        },
+        {
+          id: "d1-06",
+          name: "Neungdong Minari Seongsu",
+          nameKr: "능동 미나리 성수",
+          category: "food",
+          emoji: "🌿",
+          desc: "水芹菜料理，清爽健康的韓式餐廳",
+          hours: "11:30–21:00",
+          closed: "週一",
+          lat: 37.5461, lng: 127.0598,
+          tags: ["韓食", "健康"]
+        },
+        {
+          id: "d1-07",
+          name: "niceghostclub seoul",
+          nameKr: "나이스고스트클럽",
+          category: "shop",
+          emoji: "👻",
+          desc: "聖水個性選物",
+          hours: "12:00–20:00",
+          closed: "無",
+          lat: 37.5449, lng: 127.0554,
+          tags: ["選物", "個性"]
+        },
+        {
+          id: "d1-08",
+          name: "GASSTATION",
+          nameKr: "개스스테이션",
+          category: "shop",
+          emoji: "⛽",
+          desc: "改裝加油站的個性選物空間",
+          hours: "12:00–20:00",
+          closed: "無",
+          lat: 37.5452, lng: 127.0548,
+          tags: ["選物", "空間"]
+        },
+        {
+          id: "d1-09",
+          name: "entripaper",
+          nameKr: "엔트리페이퍼",
+          category: "shop",
+          emoji: "📄",
+          desc: "紙品文具選物",
+          hours: "12:00–19:00",
+          closed: "週一",
+          lat: 37.5444, lng: 127.0566,
+          tags: ["文具", "紙品"]
+        },
+        {
+          id: "d1-10",
+          name: "PARAMADE PICKERS",
+          nameKr: "파라메이드피커스",
+          category: "shop",
+          emoji: "🎩",
+          desc: "二手帽子專賣店",
+          hours: "13:00–20:00",
+          closed: "週一",
+          lat: 37.5447, lng: 127.0559,
+          tags: ["二手", "帽子"]
+        },
+        {
+          id: "d1-11",
+          name: "NOmal A bookstore",
+          nameKr: "노멀에이 서점",
+          category: "shop",
+          emoji: "📖",
+          desc: "聖水獨立書店，設計藝術選書",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5443, lng: 127.0562,
+          tags: ["書店", "設計"]
+        },
+        {
+          id: "d1-12",
+          name: "山清 黑豬肉",
+          nameKr: "산청숯불구이",
+          category: "food",
+          emoji: "🍖",
+          highlight: true,
+          desc: "今日晚餐！黑豬肉炭火燒烤，D1必吃",
+          hours: "17:00–23:00",
+          closed: "無",
+          lat: 37.5455, lng: 127.0571,
+          tags: ["烤肉", "晚餐", "必吃"]
+        },
+        {
+          id: "d1-13",
+          name: "Music Complex Seoul",
+          nameKr: "뮤직컴플렉스서울",
+          category: "shop",
+          emoji: "🎵",
+          desc: "音樂複合空間，黑膠唱片選品",
+          hours: "13:00–21:00",
+          closed: "週一",
+          lat: 37.5459, lng: 127.0563,
+          tags: ["音樂", "唱片"]
+        }
+      ]
+    },
+    {
+      id: "d2",
+      label: "D2",
+      date: "5/9",
+      day: "SAT",
+      theme: "北村西巡",
+      color: "#FF6B00",
+      emoji: "🏃",
+      desc: "早起景福宮晨跑！之後逛北村韓屋村、西巡邏街、乙支路。",
+      spots: [
+        {
+          id: "d2-01",
+          name: "NB Bukchon 景福宮晨跑",
+          nameKr: "뉴발란스 북촌점",
+          category: "activity",
+          emoji: "🏃",
+          highlight: true,
+          desc: "08:00開門！NB北村店租借裝備，景福宮周邊晨跑",
+          hours: "08:00–21:00",
+          closed: "無",
+          lat: 37.5836, lng: 126.9826,
+          tags: ["跑步", "運動", "晨跑"]
+        },
+        {
+          id: "d2-02",
+          name: "Artist Bakery",
+          nameKr: "아티스트베이커리",
+          category: "food",
+          emoji: "🥐",
+          desc: "北村人氣麵包店，早餐首選",
+          hours: "08:00–18:00",
+          closed: "週一",
+          lat: 37.5824, lng: 126.9831,
+          tags: ["麵包", "早餐", "咖啡"]
+        },
+        {
+          id: "d2-03",
+          name: "倫敦貝果博物館 安國店",
+          nameKr: "런던베이글뮤지엄 안국점",
+          category: "food",
+          emoji: "🥯",
+          desc: "首爾排隊名店，各種口味貝果",
+          hours: "08:00–20:00",
+          closed: "無",
+          lat: 37.5795, lng: 126.9836,
+          tags: ["貝果", "排隊", "早午餐"]
+        },
+        {
+          id: "d2-04",
+          name: "goodrunner 북촌점",
+          nameKr: "굿러너컴퍼니 북촌점",
+          category: "shop",
+          emoji: "👟",
+          desc: "北村分店，韓國跑步文化選品",
+          hours: "12:00–20:00",
+          closed: "週二",
+          lat: 37.5822, lng: 126.9834,
+          tags: ["跑步", "選品"]
+        },
+        {
+          id: "d2-05",
+          name: "LEMON SEOUL",
+          nameKr: "레몬서울",
+          category: "shop",
+          emoji: "🕹️",
+          desc: "二手電器老物件，復古感十足",
+          hours: "13:00–20:00",
+          closed: "週一",
+          lat: 37.5819, lng: 126.9841,
+          tags: ["二手", "電器", "復古"]
+        },
+        {
+          id: "d2-06",
+          name: "西巡邏街",
+          nameKr: "서순라길",
+          category: "area",
+          emoji: "🏯",
+          desc: "昌德宮旁的靜謐街道，獨立小店聚集",
+          hours: "全天",
+          closed: "依店家",
+          lat: 37.5801, lng: 126.9896,
+          tags: ["街區", "散步"]
+        },
+        {
+          id: "d2-07",
+          name: "Dong-a stationary store",
+          nameKr: "동아문구",
+          category: "shop",
+          emoji: "✏️",
+          desc: "老文具店，懷舊韓國文具",
+          hours: "10:00–19:00",
+          closed: "週日",
+          lat: 37.5697, lng: 126.9896,
+          tags: ["文具", "老店"]
+        },
+        {
+          id: "d2-08",
+          name: "Ppau",
+          nameKr: "빠우",
+          category: "food",
+          emoji: "🍩",
+          desc: "乙支路人氣甜甜圈",
+          hours: "12:00–21:00",
+          closed: "週一",
+          lat: 37.5669, lng: 126.9921,
+          tags: ["甜點", "甜甜圈"]
+        },
+        {
+          id: "d2-09",
+          name: "Oldies Taco",
+          nameKr: "올디스타코",
+          category: "food",
+          emoji: "🌮",
+          desc: "乙支路塔可餅，復古美式風格",
+          hours: "12:00–22:00",
+          closed: "無",
+          lat: 37.5671, lng: 126.9918,
+          tags: ["塔可", "美食"]
+        },
+        {
+          id: "d2-10",
+          name: "POHS-TIHS",
+          nameKr: "포스티스",
+          category: "shop",
+          emoji: "👕",
+          desc: "乙支路個性選物",
+          hours: "13:00–20:00",
+          closed: "週一",
+          lat: 37.5672, lng: 126.9922,
+          tags: ["選物", "潮流"]
+        },
+        {
+          id: "d2-11",
+          name: "NOmal A bookstore",
+          nameKr: "노멀에이 을지로점",
+          category: "shop",
+          emoji: "📖",
+          desc: "乙支路分店，藝術設計選書",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5668, lng: 126.9915,
+          tags: ["書店", "設計"]
+        },
+        {
+          id: "d2-12",
+          name: "山清 黑豬肉",
+          nameKr: "산청숯불구이",
+          category: "food",
+          emoji: "🍖",
+          highlight: true,
+          desc: "今日晚餐！黑豬肉炭火燒烤",
+          hours: "17:00–23:00",
+          closed: "無",
+          lat: 37.5671, lng: 126.9927,
+          tags: ["烤肉", "晚餐", "必吃"]
+        },
+        {
+          id: "d2-13",
+          name: "Music Complex Seoul",
+          nameKr: "뮤직컴플렉스서울",
+          category: "shop",
+          emoji: "🎵",
+          desc: "黑膠唱片＋音樂文化空間",
+          hours: "13:00–21:00",
+          closed: "週一",
+          lat: 37.5459, lng: 127.0563,
+          tags: ["音樂", "唱片"]
+        }
+      ]
+    },
+    {
+      id: "d3",
+      label: "D3",
+      date: "5/10",
+      day: "SUN",
+      theme: "漢江日",
+      color: "#FFD600",
+      emoji: "🌊",
+      desc: "最精彩的一天！廣藏早市→東大門→漢江野餐→彩虹噴泉。",
+      highlight: true,
+      spots: [
+        {
+          id: "d3-01",
+          name: "廣藏市場",
+          nameKr: "광장시장",
+          category: "food",
+          emoji: "🥢",
+          highlight: true,
+          desc: "首爾最古老的傳統市場。必吃：綠豆煎餅、麻藥紫菜飯捲、生拌牛肉",
+          hours: "09:00–18:00（部分攤位更早）",
+          closed: "週日部分攤位",
+          lat: 37.5700, lng: 126.9997,
+          tags: ["市場", "早市", "必吃"]
+        },
+        {
+          id: "d3-02",
+          name: "明洞一隻雞（始祖店）",
+          nameKr: "명동 닭한마리 원조",
+          category: "food",
+          emoji: "🍗",
+          highlight: true,
+          desc: "午餐！整隻雞湯鍋，手打刀削麵，首爾必吃",
+          hours: "10:00–21:00",
+          closed: "無",
+          lat: 37.5695, lng: 126.9998,
+          tags: ["雞湯", "午餐", "必吃"]
+        },
+        {
+          id: "d3-03",
+          name: "꿈동산 老玩具街",
+          nameKr: "꿈동산 동심쇼핑센터",
+          category: "shop",
+          emoji: "🧸",
+          desc: "滿滿懷舊玩具的老商場，攝影寶地",
+          hours: "10:00–19:00",
+          closed: "週日",
+          lat: 37.5699, lng: 127.0095,
+          tags: ["玩具", "復古", "拍照"]
+        },
+        {
+          id: "d3-04",
+          name: "東關王廟",
+          nameKr: "동관왕묘",
+          category: "activity",
+          emoji: "🏯",
+          desc: "關羽廟，東大門附近靜謐的歷史建築",
+          hours: "09:00–18:00",
+          closed: "週一",
+          lat: 37.5698, lng: 127.0128,
+          tags: ["歷史", "建築", "免費"]
+        },
+        {
+          id: "d3-05",
+          name: "東大門設計廣場 DDP",
+          nameKr: "동대문디자인플라자",
+          category: "activity",
+          emoji: "🌀",
+          desc: "扎哈哈蒂設計，流線型建築奇觀，常設展覽",
+          hours: "10:00–21:00",
+          closed: "週一",
+          lat: 37.5670, lng: 127.0095,
+          tags: ["建築", "設計", "展覽"]
+        },
+        {
+          id: "d3-06",
+          name: "Elak Coffee",
+          nameKr: "엘락커피",
+          category: "food",
+          emoji: "☕",
+          desc: "DDP旁步行5分鐘，精品咖啡下午茶",
+          hours: "10:00–22:00",
+          closed: "無",
+          lat: 37.5651, lng: 127.0089,
+          tags: ["咖啡", "下午茶"]
+        },
+        {
+          id: "d3-07",
+          name: "낭만소풍 野餐墊租借",
+          nameKr: "낭만소풍",
+          category: "activity",
+          emoji: "🧺",
+          highlight: true,
+          desc: "돗자리피크닉 4號方案 | 2人 ₩24,000 / 4小時 | 서초구 신반포로 195",
+          hours: "매일 영업（依季節）",
+          closed: "無",
+          lat: 37.5070, lng: 126.9970,
+          tags: ["租借", "野餐", "漢江"]
+        },
+        {
+          id: "d3-08",
+          name: "서래섬 봄결찬란 音樂會",
+          nameKr: "서래섬 봄결 찬란",
+          category: "activity",
+          emoji: "🎵",
+          highlight: true,
+          desc: "免費！14:00–19:30 六組表演。14:00 민물결 · 15:00 해밀 · 16:00 김나린 · 17:00 산들 · 18:00 딸기주스 · 19:00 한음",
+          hours: "14:00–20:00",
+          closed: "5/8–5/10限定",
+          lat: 37.5048, lng: 126.9969,
+          tags: ["音樂", "免費", "漢江", "限定"]
+        },
+        {
+          id: "d3-09",
+          name: "盤浦大橋彩虹噴泉",
+          nameKr: "반포대교 달빛무지개분수",
+          category: "activity",
+          emoji: "🌈",
+          highlight: true,
+          desc: "20:00場次！世界最長橋樑噴泉，配K-pop音樂，壯觀必看",
+          hours: "20:00–20:20（5月場次）",
+          closed: "雨天/強風取消",
+          lat: 37.5097, lng: 126.9971,
+          tags: ["噴泉", "夜景", "必看"]
+        }
+      ]
+    },
+    {
+      id: "d4",
+      label: "D4",
+      date: "5/11",
+      day: "MON",
+      theme: "延南日",
+      color: "#FF6B00",
+      emoji: "🎶",
+      desc: "弘大周邊慢慢逛，延南洞文青街區，唱片、二手帽、咖啡。",
+      spots: [
+        {
+          id: "d4-01",
+          name: "Randy's Donuts Yeonnam Branch",
+          nameKr: "랜디스도넛 연남점",
+          category: "food",
+          emoji: "🍩",
+          highlight: true,
+          desc: "L.A.名店首爾分店，早午餐首選！各種造型甜甜圈",
+          hours: "09:00–21:00",
+          closed: "無",
+          lat: 37.5618, lng: 126.9239,
+          tags: ["甜甜圈", "早午餐", "必吃"]
+        },
+        {
+          id: "d4-02",
+          name: "平和延南 牛腸墨魚鍋",
+          nameKr: "평화연남",
+          category: "food",
+          emoji: "🍲",
+          desc: "延南洞特色料理，牛腸搭墨魚的獨特組合",
+          hours: "11:30–22:00",
+          closed: "無",
+          lat: 37.5622, lng: 126.9231,
+          tags: ["韓食", "特色", "午餐"]
+        },
+        {
+          id: "d4-03",
+          name: "광계 光雞 GWANGGYE",
+          nameKr: "광계",
+          category: "food",
+          emoji: "🍗",
+          desc: "人參雞湯名店，延南洞巷弄中的老店",
+          hours: "11:00–21:00",
+          closed: "週二",
+          lat: 37.5619, lng: 126.9244,
+          tags: ["人參雞湯", "韓食"]
+        },
+        {
+          id: "d4-04",
+          name: "YOUR-MIND",
+          nameKr: "유어마인드",
+          category: "shop",
+          emoji: "📚",
+          desc: "首爾著名獨立出版書店，藝術/設計/音樂類書籍",
+          hours: "13:00–20:00",
+          closed: "週二",
+          lat: 37.5614, lng: 126.9247,
+          tags: ["書店", "獨立出版", "設計"]
+        },
+        {
+          id: "d4-05",
+          name: "Gimbab Records",
+          nameKr: "김밥레코즈",
+          category: "shop",
+          emoji: "💿",
+          desc: "黑膠唱片專門店，韓國indie音樂寶庫",
+          hours: "13:00–21:00",
+          closed: "無",
+          lat: 37.5487, lng: 126.9221,
+          tags: ["唱片", "黑膠", "音樂"]
+        },
+        {
+          id: "d4-06",
+          name: "mascompany",
+          nameKr: "마스컴퍼니",
+          category: "shop",
+          emoji: "🎩",
+          desc: "二手帽子專賣，上水洞獨立小店",
+          hours: "13:00–20:00",
+          closed: "週一",
+          lat: 37.5491, lng: 126.9218,
+          tags: ["二手", "帽子"]
+        },
+        {
+          id: "d4-07",
+          name: "Jebi Dabang",
+          nameKr: "제비다방",
+          category: "food",
+          emoji: "☕",
+          highlight: true,
+          desc: "復古韓式茶房，歷史感空間，今日收尾咖啡",
+          hours: "13:00–22:00",
+          closed: "週一",
+          lat: 37.5493, lng: 126.9225,
+          tags: ["咖啡", "復古", "茶房"]
+        }
+      ]
+    },
+    {
+      id: "d5",
+      label: "D5",
+      date: "5/12",
+      day: "TUE",
+      theme: "望遠收尾",
+      color: "#FF6B00",
+      emoji: "✈️",
+      desc: "最後一天！望遠市場周邊慢逛，19:00出發機場。",
+      spots: [
+        {
+          id: "d5-01",
+          name: "The childhood Home",
+          nameKr: "더 칠드후드 홈",
+          category: "shop",
+          emoji: "🏠",
+          desc: "充滿童年記憶的酷ㄌ選物店",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5543, lng: 126.9058,
+          tags: ["選物", "特色"]
+        },
+        {
+          id: "d5-02",
+          name: "Small Nest",
+          nameKr: "스몰네스트",
+          category: "shop",
+          emoji: "🪴",
+          desc: "望遠洞生活選物店",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5551, lng: 126.9071,
+          tags: ["選物", "生活"]
+        },
+        {
+          id: "d5-03",
+          name: "勣勣糖餅",
+          nameKr: "망원 호떡",
+          category: "food",
+          emoji: "🍡",
+          desc: "望遠市場名物！外脆內軟的韓式糖餅",
+          hours: "10:00–18:00",
+          closed: "依攤位",
+          lat: 37.5548, lng: 126.9066,
+          tags: ["街食", "甜點", "市場"]
+        },
+        {
+          id: "d5-04",
+          name: "Uirak Mangwon Main Branch",
+          nameKr: "의락 망원본점",
+          category: "food",
+          emoji: "🍜",
+          desc: "望遠洞人氣餐廳",
+          hours: "11:30–21:00",
+          closed: "週一",
+          lat: 37.5545, lng: 126.9063,
+          tags: ["韓食", "午餐"]
+        },
+        {
+          id: "d5-05",
+          name: "merry more",
+          nameKr: "메리모어",
+          category: "shop",
+          emoji: "🎀",
+          desc: "望遠洞可愛雜貨選物",
+          hours: "12:00–20:00",
+          closed: "週一",
+          lat: 37.5547, lng: 126.9060,
+          tags: ["雜貨", "選物"]
+        },
+        {
+          id: "d5-06",
+          name: "出發！仁川機場",
+          nameKr: "인천국제공항",
+          category: "transport",
+          emoji: "✈️",
+          highlight: true,
+          desc: "19:00 從弘大出發 → AREX → 仁川機場。TR873 23:00 起飛！",
+          hours: "19:00出發",
+          closed: "",
+          lat: 37.4602, lng: 126.4407,
+          tags: ["交通", "機場", "回家"]
+        }
+      ]
+    }
+  ],
+
+  phrases: [
+    { kr: "안녕하세요", roman: "annyeong-haseyo", zh: "你好" },
+    { kr: "감사합니다", roman: "gamsahamnida", zh: "謝謝" },
+    { kr: "얼마예요?", roman: "eolmayeyo?", zh: "多少錢？" },
+    { kr: "이거 주세요", roman: "igeo juseyo", zh: "請給我這個" },
+    { kr: "맛있어요!", roman: "masisseoyo!", zh: "好好吃！" },
+    { kr: "화장실 어디예요?", roman: "hwajangsil eodiyeyo?", zh: "廁所在哪？" },
+    { kr: "계산해 주세요", roman: "gyesan hae juseyo", zh: "結帳" },
+    { kr: "사진 찍어도 돼요?", roman: "sajin jjigeodo dwaeyo?", zh: "可以拍照嗎？" },
+    { kr: "너무 귀여워요!", roman: "neomu gwiyeowoyo!", zh: "好可愛！" },
+    { kr: "봉투 필요 없어요", roman: "bongtu piryo eopseoyo", zh: "不用袋子" },
+    { kr: "천천히 말해 주세요", roman: "cheoncheonhi malhae juseyo", zh: "請說慢一點" },
+    { kr: "카레 맛집 어디예요?", roman: "kare matjip eodiyeyo?", zh: "哪裡咖哩好吃？" },
+    { kr: "영어 할 수 있어요?", roman: "yeongeo hal su isseoyo?", zh: "你會說英文嗎？" },
+    { kr: "포장해 주세요", roman: "pojang hae juseyo", zh: "外帶/打包" },
+    { kr: "맵지 않게 해주세요", roman: "maepji ange haejuseyo", zh: "不要辣" }
+  ],
+
+  transport: {
+    inbound: { flight: "BR170", from: "桃園 TPE", to: "仁川 ICN", dep: "07:05", arr: "10:30", note: "AREX 單程 ₩9,500" },
+    outbound: { flight: "TR873", from: "仁川 ICN", to: "台北", dep: "23:00", note: "19:00 從弘大出發" },
+    card: { name: "氣候同行卡 5日券", price: "₩23,000", note: "地鐵＋公車無限搭 | 弘大入口站購買", warning: "⚠ 不能從仁川機場上車，去程另購AREX票" },
+    stations: [
+      { line: "2號線", color: "#3DB745", spots: "弘大入口 · 聖水 · DDP" },
+      { line: "3號線", color: "#EF7C1C", spots: "安國（北村）· 景福宮" },
+      { line: "5號線", color: "#9B4BA1", spots: "廣藏市場（鍾路3街）" },
+      { line: "7號線", color: "#7B6A45", spots: "뚝섬유원지（漢江）" },
+      { line: "9號線", color: "#C2A132", spots: "신반포（盤浦漢江）" }
+    ]
+  }
+};
+/* ═══════════════════════════════════════
+   APP.JS — 孤芳小隊搜ㄦ篇
+═══════════════════════════════════════ */
+
+const App = (() => {
+
+  // ── STATE ─────────────────────────────
+  let currentView = 'home';
+  let checkedSpots = JSON.parse(localStorage.getItem('seoul_checked') || '{}');
+  let pendingMapSpot = null;
+
+  // ── INIT ──────────────────────────────
+  function init() {
+    renderHeader();
+    renderHero();
+    renderViews();
+    bindNav();
+    fetchWeather();
+    showView('home');
+  }
+
+  // ── HEADER ────────────────────────────
+  function renderHeader() {
+    const header = document.getElementById('site-header');
+    header.innerHTML = `
+      <div class="header-top">
+        <div class="site-logo">孤芳<span>ㄦ</span></div>
+        <div id="weather-widget" class="weather-widget">
+          <span>🌤</span>
+          <span class="temp" id="temp">--°C</span>
+          <span id="weather-desc" style="font-size:10px;color:#555;">載入中...</span>
+        </div>
+        <div class="header-meta">首爾 · May 2026</div>
+      </div>
+      <nav class="day-nav" id="day-nav">
+        <button class="day-tab tab-home active" data-view="home" onclick="App.switchView('home')">
+          <span style="font-family:var(--font-display);font-size:18px;">⌂</span>
+          <span class="day-tab-date">總覽</span>
+        </button>
+        ${TRIP_DATA.days.map(d => `
+          <button class="day-tab" data-view="${d.id}" onclick="App.switchView('${d.id}')">
+            <span class="day-tab-label">${d.label}</span>
+            <span class="day-tab-date">${d.date} ${d.day}</span>
+            <span class="day-tab-theme">${d.theme}</span>
+          </button>
+        `).join('')}
+        <button class="day-tab" data-view="phrases" onclick="App.switchView('phrases')">
+          <span style="font-family:var(--font-display);font-size:18px;">한</span>
+          <span class="day-tab-date">韓語</span>
+        </button>
+        <button class="day-tab" data-view="transport" onclick="App.switchView('transport')">
+          <span style="font-family:var(--font-display);font-size:18px;">✈</span>
+          <span class="day-tab-date">交通</span>
+        </button>
+      </nav>
+    `;
+  }
+
+  // ── HERO ──────────────────────────────
+  function renderHero() {
+    const hero = document.getElementById('hero');
+    const t = TRIP_DATA.transport;
+    hero.innerHTML = `
+      <div class="hero">
+        <div class="hero-left">
+          <div>
+            <div class="hero-eyebrow">Vol.01 · Spring 2026</div>
+            <h1 class="hero-title">
+              孤芳小隊<br>
+              <em>海外大冒險</em>
+            </h1>
+            <div class="hero-sub">搜ㄦ篇 · Seoul</div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">聖水</span>
+            <span class="tag">北村</span>
+            <span class="tag">漢江</span>
+            <span class="tag">延南</span>
+            <span class="tag">望遠</span>
+            <span class="tag">乙支路</span>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-info-grid">
+            <div class="hero-info-item">
+              <div class="hero-info-label">日期</div>
+              <div class="hero-info-value">MAY 08–12</div>
+            </div>
+            <div class="hero-info-item">
+              <div class="hero-info-label">基地</div>
+              <div class="hero-info-value">弘大 HQ</div>
+            </div>
+            <div class="hero-info-item">
+              <div class="hero-info-label">去程</div>
+              <div class="hero-info-value">${t.inbound.flight}</div>
+            </div>
+            <div class="hero-info-item">
+              <div class="hero-info-label">回程</div>
+              <div class="hero-info-value">${t.outbound.flight}</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:4px;">打卡進度</div>
+            <div id="hero-progress" style="font-family:var(--font-display);font-size:32px;line-height:1;">0 / ${getTotalSpots()}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── VIEWS ─────────────────────────────
+  function renderViews() {
+    const main = document.getElementById('main');
+    main.innerHTML = `
+      ${renderHomeView()}
+      ${TRIP_DATA.days.map(d => renderDayView(d)).join('')}
+      ${renderPhrasesView()}
+      ${renderTransportView()}
+      ${renderMapModal()}
+    `;
+  }
+
+  // Home overview
+  function renderHomeView() {
+    return `
+      <div class="view" id="view-home">
+        <div class="section-header">
+          <div class="section-title">5日行程 <span>一覽</span></div>
+          <div class="section-meta">${TRIP_DATA.days.length} days · ${getTotalSpots()} spots</div>
+        </div>
+        <div class="overview-grid">
+          ${TRIP_DATA.days.map(d => `
+            <div class="overview-card ${d.highlight ? 'highlight-day' : ''}" onclick="App.switchView('${d.id}')">
+              <div class="overview-card-day">${d.label}</div>
+              <div class="overview-card-date">${d.date} · ${d.day}</div>
+              <div class="overview-card-theme">${d.emoji} ${d.theme}</div>
+              <div class="overview-card-desc">${d.desc}</div>
+              <div class="overview-card-count">${d.spots.length} spots</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Global progress -->
+        <div class="progress-bar-section">
+          <span class="progress-label">整體打卡進度</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="global-progress-fill" style="width:0%"></div>
+          </div>
+          <span class="progress-count" id="global-progress-count">0 / ${getTotalSpots()}</span>
+        </div>
+
+        <!-- Quick phrases teaser -->
+        <div class="section-header" style="cursor:pointer;" onclick="App.switchView('phrases')">
+          <div class="section-title">韓語會話 <span>速查</span></div>
+          <div class="section-meta">點擊翻牌 →</div>
+        </div>
+        <div class="phrases-grid" style="border-bottom:var(--rule);">
+          ${TRIP_DATA.phrases.slice(0, 6).map((p, i) => renderPhraseCard(p, i)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Day view
+  function renderDayView(day) {
+    const checkedCount = day.spots.filter(s => checkedSpots[s.id]).length;
+    return `
+      <div class="view" id="view-${day.id}">
+        <div class="section-header">
+          <div class="section-title">${day.label} <span>${day.theme}</span></div>
+          <div class="section-meta">${day.date} · ${day.day} · ${day.spots.length} spots</div>
+        </div>
+        <div class="progress-bar-section">
+          <span class="progress-label">今日打卡</span>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill-${day.id}" style="width:${checkedCount/day.spots.length*100}%"></div>
+          </div>
+          <span class="progress-count" id="progress-count-${day.id}">${checkedCount} / ${day.spots.length}</span>
+        </div>
+        <div class="spots-list" id="spots-${day.id}">
+          ${day.spots.map(s => renderSpotCard(s)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Spot card
+  function renderSpotCard(spot) {
+    const isChecked = !!checkedSpots[spot.id];
+    const statusInfo = getStatusInfo(spot);
+    return `
+      <div class="spot-card ${spot.highlight ? 'highlight' : ''} ${isChecked ? 'checked' : ''}" id="card-${spot.id}">
+        <div class="spot-header">
+          <div class="spot-emoji">${spot.emoji}</div>
+          <div>
+            <div class="spot-name">${spot.name}</div>
+            <div class="spot-name-kr">${spot.nameKr}</div>
+          </div>
+        </div>
+        <div class="spot-desc">${spot.desc}</div>
+        <div class="spot-status ${statusInfo.cls}">
+          <span class="dot"></span>
+          <span>${statusInfo.label}</span>
+        </div>
+        <div class="spot-hours">🕐 ${spot.hours}${spot.closed ? ' · 公休：' + spot.closed : ''}</div>
+        <div class="spot-tags">
+          ${spot.tags.map(t => `<span class="spot-tag">${t}</span>`).join('')}
+        </div>
+        <div class="spot-actions">
+          <button class="btn btn-check" onclick="App.toggleCheck('${spot.id}')">
+            ${isChecked ? '✓ 已打卡' : '打卡'}
+          </button>
+          ${spot.lat ? `
+            <button class="btn" onclick="App.openMapModal('${spot.id}')">
+              📍 地圖
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // Phrases view
+  function renderPhrasesView() {
+    return `
+      <div class="view" id="view-phrases">
+        <div class="section-header">
+          <div class="section-title">韓語會話 <span>點擊翻牌</span></div>
+          <div class="section-meta">${TRIP_DATA.phrases.length} phrases</div>
+        </div>
+        <div class="phrases-grid" style="border-bottom:var(--rule);">
+          ${TRIP_DATA.phrases.map((p, i) => renderPhraseCard(p, i)).join('')}
+        </div>
+        <!-- Search keywords -->
+        <div class="section-header">
+          <div class="section-title">搜尋 <span>關鍵字</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));border-top:var(--rule);">
+          ${[
+            ['카레 맛집', '咖哩好店'],
+            ['빈티지', '古著二手'],
+            ['독립서점', '獨立書店'],
+            ['맛집', '美食餐廳'],
+            ['카페', '咖啡廳'],
+            ['스포츠용품', '運動用品'],
+            ['음반', '唱片黑膠'],
+            ['문구', '文具雜貨']
+          ].map(([kr, zh]) => `
+            <div style="padding:16px;border-right:var(--rule);border-bottom:var(--rule);">
+              <div style="font-family:var(--font-body);font-weight:700;font-size:20px;margin-bottom:4px;">${kr}</div>
+              <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;">${zh}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPhraseCard(p, i) {
+    return `
+      <div class="phrase-card" id="phrase-${i}" onclick="App.flipPhrase(${i})">
+        <div class="phrase-inner">
+          <div class="phrase-front">
+            <div class="phrase-zh-text">${p.zh}</div>
+            <div class="phrase-hint">點擊看韓文 →</div>
+          </div>
+          <div class="phrase-back">
+            <div class="phrase-kr-text">${p.kr}</div>
+            <div class="phrase-roman-text">${p.roman}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Transport view
+  function renderTransportView() {
+    const t = TRIP_DATA.transport;
+    return `
+      <div class="view" id="view-transport">
+        <div class="section-header">
+          <div class="section-title">交通 <span>攻略</span></div>
+          <div class="section-meta">Flights · Card · Metro</div>
+        </div>
+        <div class="transport-grid">
+          <div class="transport-block">
+            <div class="transport-block-title">✈ 去程</div>
+            <div class="transport-block-sub">Inbound Flight</div>
+            <div class="flight-card">
+              <div class="flight-number">${t.inbound.flight}</div>
+              <div class="flight-route">
+                <span>${t.inbound.from}</span>
+                <span>→</span>
+                <span>${t.inbound.to}</span>
+              </div>
+              <div class="flight-time">出發 ${t.inbound.dep} · 抵達 ${t.inbound.arr}</div>
+            </div>
+            <div class="card-info">
+              <div class="card-info-title">機場 → 市區</div>
+              <div style="font-family:var(--font-cond);font-size:22px;font-weight:700;color:var(--orange);margin-bottom:4px;">AREX 機場快線</div>
+              <div class="card-info-note">${t.inbound.note}<br>直達弘大入口站約 43 分鐘</div>
+            </div>
+          </div>
+
+          <div class="transport-block">
+            <div class="transport-block-title">✈ 回程</div>
+            <div class="transport-block-sub">Outbound Flight</div>
+            <div class="flight-card">
+              <div class="flight-number">${t.outbound.flight}</div>
+              <div class="flight-route">
+                <span>${t.outbound.from}</span>
+                <span>→</span>
+                <span>${t.outbound.to}</span>
+              </div>
+              <div class="flight-time">起飛 ${t.outbound.dep}</div>
+            </div>
+            <div class="card-info">
+              <div class="card-info-title">市區 → 機場</div>
+              <div style="font-family:var(--font-cond);font-size:22px;font-weight:700;color:var(--orange);margin-bottom:4px;">19:00 弘大出發</div>
+              <div class="card-info-note">${t.outbound.note}<br>氣候同行卡可搭 AREX 回程 ✓</div>
+            </div>
+          </div>
+
+          <div class="transport-block">
+            <div class="transport-block-title">🚇 交通卡</div>
+            <div class="transport-block-sub">Climate Card</div>
+            <div class="card-info" style="background:var(--yellow);border-color:var(--ink);">
+              <div class="card-info-title">${t.card.name}</div>
+              <div class="card-info-price">${t.card.price}</div>
+              <div class="card-info-note">${t.card.note}</div>
+            </div>
+            <div class="warning-box">
+              <p>${t.card.warning}</p>
+            </div>
+          </div>
+
+          <div class="transport-block">
+            <div class="transport-block-title">🗺 常用</div>
+            <div class="transport-block-sub">Key Stations</div>
+            <div class="metro-list">
+              ${t.stations.map(s => `
+                <div class="metro-item">
+                  <span class="metro-badge" style="background:${s.color};">${s.line}</span>
+                  <span class="metro-spots">${s.spots}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Map modal
+  function renderMapModal() {
+    return `
+      <div class="map-modal-overlay" id="map-modal-overlay" onclick="App.closeMapModal(event)">
+        <div class="map-modal">
+          <div class="map-modal-title" id="modal-spot-name">景點名稱</div>
+          <div class="map-modal-kr" id="modal-spot-kr">한국어</div>
+          <div class="map-btn-row">
+            <button class="map-big-btn google" id="btn-google-map">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Google Maps
+            </button>
+            <button class="map-big-btn kakao" id="btn-kakao-map">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.79 1.68 5.24 4.2 6.71L5.1 21l4.2-2.1c.88.2 1.77.3 2.7.3 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
+              Kakao Map
+            </button>
+          </div>
+          <button class="map-modal-close" onclick="App.closeMapModal()">닫기 · 關閉</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ── NAVIGATION ────────────────────────
+  function bindNav() {}
+
+  function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+
+    const target = document.getElementById(`view-${viewId}`);
+    if (target) target.classList.add('active');
+
+    const tab = document.querySelector(`[data-view="${viewId}"]`);
+    if (tab) tab.classList.add('active');
+
+    currentView = viewId;
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── CHECK / UNCHECK ───────────────────
+  function toggleCheck(spotId) {
+    checkedSpots[spotId] = !checkedSpots[spotId];
+    if (!checkedSpots[spotId]) delete checkedSpots[spotId];
+    localStorage.setItem('seoul_checked', JSON.stringify(checkedSpots));
+
+    const card = document.getElementById(`card-${spotId}`);
+    if (!card) return;
+
+    const isChecked = !!checkedSpots[spotId];
+    card.classList.toggle('checked', isChecked);
+    const btn = card.querySelector('.btn-check');
+    if (btn) btn.textContent = isChecked ? '✓ 已打卡' : '打卡';
+
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = getTotalSpots();
+    const checked = Object.keys(checkedSpots).length;
+    const pct = total > 0 ? (checked / total * 100) : 0;
+
+    const heroP = document.getElementById('hero-progress');
+    if (heroP) heroP.textContent = `${checked} / ${total}`;
+
+    const globalFill = document.getElementById('global-progress-fill');
+    const globalCount = document.getElementById('global-progress-count');
+    if (globalFill) globalFill.style.width = pct + '%';
+    if (globalCount) globalCount.textContent = `${checked} / ${total}`;
+
+    TRIP_DATA.days.forEach(day => {
+      const dayChecked = day.spots.filter(s => checkedSpots[s.id]).length;
+      const dayPct = day.spots.length > 0 ? (dayChecked / day.spots.length * 100) : 0;
+      const fill = document.getElementById(`progress-fill-${day.id}`);
+      const count = document.getElementById(`progress-count-${day.id}`);
+      if (fill) fill.style.width = dayPct + '%';
+      if (count) count.textContent = `${dayChecked} / ${day.spots.length}`;
+    });
+  }
+
+  // ── MAP MODAL ─────────────────────────
+  function openMapModal(spotId) {
+    const spot = findSpot(spotId);
+    if (!spot) return;
+    pendingMapSpot = spot;
+
+    document.getElementById('modal-spot-name').textContent = spot.name;
+    document.getElementById('modal-spot-kr').textContent = spot.nameKr;
+
+    const gmUrl = `https://www.google.com/maps?q=${spot.lat},${spot.lng}`;
+    const kmUrl = `https://map.kakao.com/link/map/${encodeURIComponent(spot.nameKr)},${spot.lat},${spot.lng}`;
+
+    document.getElementById('btn-google-map').onclick = () => window.open(gmUrl, '_blank');
+    document.getElementById('btn-kakao-map').onclick  = () => window.open(kmUrl, '_blank');
+
+    document.getElementById('map-modal-overlay').classList.add('open');
+  }
+
+  function closeMapModal(e) {
+    if (!e || e.target === document.getElementById('map-modal-overlay') || !e.target.closest('.map-modal')) {
+      document.getElementById('map-modal-overlay').classList.remove('open');
+      pendingMapSpot = null;
+    }
+  }
+
+  // ── PHRASE FLIP ───────────────────────
+  function flipPhrase(i) {
+    const card = document.getElementById(`phrase-${i}`);
+    if (card) card.classList.toggle('flipped');
+  }
+
+  // ── WEATHER ───────────────────────────
+  async function fetchWeather() {
+    try {
+      // Open-Meteo — 首爾座標，不需要API Key
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,weathercode,apparent_temperature&timezone=Asia%2FSeoul';
+      const res = await fetch(url);
+      const data = await res.json();
+      const c = data.current;
+
+      const temp = Math.round(c.temperature_2m);
+      const feel = Math.round(c.apparent_temperature);
+      const desc = getWeatherDesc(c.weathercode);
+      const icon = getWeatherIcon(c.weathercode);
+
+      document.getElementById('temp').textContent = `${temp}°C`;
+      document.getElementById('weather-desc').textContent = `${icon} ${desc} · 體感 ${feel}°C`;
+    } catch(e) {
+      document.getElementById('weather-desc').textContent = '首爾天氣';
+    }
+  }
+
+  function getWeatherDesc(code) {
+    if (code === 0) return '晴天';
+    if (code <= 2) return '多雲';
+    if (code === 3) return '陰天';
+    if (code <= 49) return '霧';
+    if (code <= 67) return '下雨';
+    if (code <= 77) return '下雪';
+    if (code <= 82) return '陣雨';
+    return '雷雨';
+  }
+
+  function getWeatherIcon(code) {
+    if (code === 0) return '☀️';
+    if (code <= 2) return '⛅';
+    if (code === 3) return '☁️';
+    if (code <= 49) return '🌫️';
+    if (code <= 67) return '🌧️';
+    if (code <= 77) return '❄️';
+    if (code <= 82) return '🌦️';
+    return '⛈️';
+  }
+
+  // ── STATUS ────────────────────────────
+  function getStatusInfo(spot) {
+    if (spot.category === 'area' || spot.category === 'transport') {
+      return { cls: '', label: spot.hours };
+    }
+
+    const now = new Date();
+    const koreaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+    const h = koreaTime.getHours();
+    const m = koreaTime.getMinutes();
+    const current = h * 60 + m;
+
+    const parseTime = (str) => {
+      const match = str.match(/(\d+):(\d+)/);
+      return match ? parseInt(match[1]) * 60 + parseInt(match[2]) : null;
+    };
+
+    const parts = spot.hours.split('–');
+    if (parts.length < 2) return { cls: '', label: spot.hours };
+
+    const open = parseTime(parts[0]);
+    const close = parseTime(parts[1]);
+    if (!open || !close) return { cls: '', label: spot.hours };
+
+    if (current >= open && current < close) {
+      return { cls: 'open', label: `營業中 · 到 ${parts[1]}` };
+    } else {
+      return { cls: 'closed', label: `已關閉 · 開門 ${parts[0]}` };
+    }
+  }
+
+  // ── HELPERS ───────────────────────────
+  function getTotalSpots() {
+    return TRIP_DATA.days.reduce((acc, d) => acc + d.spots.length, 0);
+  }
+
+  function findSpot(spotId) {
+    for (const day of TRIP_DATA.days) {
+      const s = day.spots.find(sp => sp.id === spotId);
+      if (s) return s;
+    }
+    return null;
+  }
+
+  // ── PUBLIC ────────────────────────────
+  return { init, switchView, toggleCheck, openMapModal, closeMapModal, flipPhrase };
+
+})();
+
+document.addEventListener('DOMContentLoaded', App.init);
+  </script>
+</body>
+</html>
