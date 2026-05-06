@@ -1,0 +1,2706 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>孤芳小隊 × 搜ㄦ篇</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇰🇷</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════
+   RESET & BASE
+════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+
+body{
+  font-family:'MS Sans Serif','Noto Sans KR',sans-serif;
+  font-size:13px;
+  background:#008080; /* Win98 teal */
+  color:#000;
+  user-select:none;
+}
+
+/* ════════════════════════════════
+   DESKTOP
+════════════════════════════════ */
+#desktop{
+  position:fixed;inset:0;
+  background: #008080 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' fill='rgba(0,0,0,0.08)'/%3E%3C/svg%3E");
+  overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+/* ════════════════════════════════
+   TOPBAR (status bar feel)
+════════════════════════════════ */
+#topbar{
+  background:#c0c0c0;
+  border-bottom:2px solid #fff;
+  border-bottom-color:#808080;
+  padding:2px 6px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  box-shadow:0 2px 0 #fff inset, 0 -1px 0 #808080 inset;
+}
+#topbar-left{font-size:11px;font-weight:bold;color:#000;}
+#topbar-right{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;
+}
+#weather-mini{
+  background:#fff;
+  border:1px solid #808080;
+  padding:1px 6px;
+  font-size:10px;
+  cursor:pointer;
+}
+#clock{font-size:11px;font-weight:bold;}
+
+/* ════════════════════════════════
+   ICON GRID (desktop icons)
+════════════════════════════════ */
+#icon-grid{
+  flex:1;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  padding:12px 6px;
+  align-content:start;
+  overflow-y:auto;
+}
+
+.desktop-icon{
+  display:flex;flex-direction:column;align-items:center;
+  padding:10px 6px;
+  cursor:pointer;
+  border-radius:2px;
+  transition:background 0.1s;
+  gap:4px;
+}
+.desktop-icon:active{background:rgba(0,0,128,0.3);}
+.desktop-icon.selected{background:rgba(0,0,128,0.4);}
+
+.icon-img{
+  font-size:36px;
+  line-height:1;
+  filter:drop-shadow(1px 1px 0 rgba(0,0,0,0.3));
+}
+.icon-label{
+  font-size:10px;
+  color:#fff;
+  text-align:center;
+  text-shadow:1px 1px 1px #000, -1px -1px 0 #000;
+  line-height:1.2;
+  max-width:72px;
+  word-break:break-all;
+}
+
+/* ════════════════════════════════
+   TASKBAR
+════════════════════════════════ */
+#taskbar{
+  background:#c0c0c0;
+  border-top:2px solid #fff;
+  padding:3px 4px;
+  display:flex;align-items:center;gap:4px;
+  flex-shrink:0;
+  box-shadow:0 -1px 0 #808080;
+}
+
+#start-btn{
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#fff #808080 #808080 #fff;
+  padding:3px 10px;
+  font-weight:bold;font-size:12px;
+  cursor:pointer;display:flex;align-items:center;gap:4px;
+  flex-shrink:0;
+}
+#start-btn:active{border-color:#808080 #fff #fff #808080;}
+#start-btn-icon{font-size:14px;}
+
+.taskbar-items{
+  flex:1;display:flex;gap:3px;overflow:hidden;
+}
+.taskbar-item{
+  background:#c0c0c0;
+  border:2px solid;border-color:#808080 #fff #fff #808080;
+  padding:2px 6px;font-size:10px;
+  max-width:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+  cursor:pointer;flex:1;text-align:left;
+}
+.taskbar-item.active{border-color:#808080 #fff #fff #808080;background:#a0a0a0;}
+.taskbar-item:active{border-color:#808080 #fff #fff #808080;}
+
+/* ════════════════════════════════
+   WINDOW SYSTEM
+════════════════════════════════ */
+.win{
+  position:fixed;
+  inset:0;
+  background:#c0c0c0;
+  display:none;
+  flex-direction:column;
+  z-index:100;
+  animation:winOpen 0.12s ease;
+}
+.win.open{display:flex;}
+
+@keyframes winOpen{
+  from{transform:scale(0.95);opacity:0;}
+  to{transform:scale(1);opacity:1;}
+}
+
+/* Window title bar */
+.win-title{
+  background:linear-gradient(90deg,#000080,#1084d0);
+  color:#fff;
+  padding:3px 4px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  font-size:11px;font-weight:bold;
+}
+.win-title-left{display:flex;align-items:center;gap:5px;}
+.win-title-icon{font-size:13px;}
+
+.win-controls{display:flex;gap:2px;}
+.win-btn{
+  width:18px;height:16px;
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  font-size:10px;font-weight:bold;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  line-height:1;color:#000;
+  flex-shrink:0;
+}
+.win-btn:active{border-color:#808080 #fff #fff #808080;}
+.win-btn.close-btn{font-size:11px;}
+
+/* Menu bar */
+.win-menubar{
+  background:#c0c0c0;
+  border-bottom:1px solid #808080;
+  padding:1px 4px;
+  display:flex;gap:8px;
+  flex-shrink:0;
+}
+.menu-item{
+  font-size:11px;padding:1px 6px;cursor:pointer;
+  text-decoration:underline;
+  text-underline-offset:1px;
+}
+.menu-item:active,.menu-item.active-menu{background:#000080;color:#fff;}
+
+/* Address bar */
+.win-addressbar{
+  display:flex;align-items:center;gap:4px;
+  padding:2px 4px;
+  background:#c0c0c0;
+  border-bottom:1px solid #808080;
+  flex-shrink:0;
+}
+.addr-label{font-size:10px;font-weight:bold;white-space:nowrap;}
+.addr-input{
+  flex:1;
+  background:#fff;
+  border:2px solid;border-color:#808080 #fff #fff #808080;
+  padding:1px 4px;font-size:10px;
+  font-family:inherit;
+}
+
+/* Content area */
+.win-content{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  background:#fff;
+  border:2px solid;border-color:#808080 #fff #fff #808080;
+  margin:2px 3px 2px 3px;
+}
+.win-content::-webkit-scrollbar{width:14px;}
+.win-content::-webkit-scrollbar-track{background:#c0c0c0;border:1px solid #808080;}
+.win-content::-webkit-scrollbar-thumb{
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+}
+
+/* Status bar */
+.win-statusbar{
+  background:#c0c0c0;
+  border-top:1px solid #808080;
+  padding:2px 6px;
+  font-size:10px;
+  color:#000;
+  flex-shrink:0;
+  display:flex;gap:10px;
+}
+.status-item{
+  border:1px solid;border-color:#808080 #fff #fff #808080;
+  padding:1px 6px;
+}
+
+/* ════════════════════════════════
+   FOLDER WINDOW (day view)
+════════════════════════════════ */
+.folder-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  padding:6px;
+}
+.folder-icon{
+  display:flex;flex-direction:column;align-items:center;
+  padding:8px 4px;gap:3px;cursor:pointer;
+  border:1px solid transparent;
+  border-radius:1px;
+}
+.folder-icon:active{
+  background:rgba(0,0,128,0.2);
+  border-color:#000080;
+}
+.folder-icon .ficon{font-size:28px;line-height:1;}
+.folder-icon .fname{
+  font-size:9px;text-align:center;
+  max-width:68px;word-break:break-all;line-height:1.3;
+}
+.folder-icon .ftype{
+  font-size:8px;color:#808080;
+}
+
+/* ════════════════════════════════
+   NOTEPAD (spot detail)
+════════════════════════════════ */
+.notepad-content{
+  padding:8px;
+  font-family:'Courier New',monospace;
+  font-size:11px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  background:#fff;
+  min-height:200px;
+}
+
+/* ════════════════════════════════
+   PHRASE CARDS (flashcard style)
+════════════════════════════════ */
+.phrase-grid{
+  padding:6px;
+  display:grid;grid-template-columns:1fr 1fr;gap:4px;
+}
+.phrase-card{
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  background:#c0c0c0;
+  padding:6px;cursor:pointer;
+  min-height:70px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  gap:3px;
+}
+.phrase-card.flipped{background:#000080;color:#fff;}
+.phrase-front-zh{font-size:13px;font-weight:bold;}
+.phrase-front-hint{font-size:9px;color:#808080;}
+.phrase-card.flipped .phrase-front-hint{color:#9db8d2;}
+.phrase-back-kr{font-size:14px;font-weight:bold;font-family:'Noto Sans KR',sans-serif;}
+.phrase-back-roman{font-size:9px;color:#9db8d2;font-style:italic;}
+
+/* ════════════════════════════════
+   EVENT LIST
+════════════════════════════════ */
+.event-list{padding:6px;}
+.event-item{
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  background:#c0c0c0;
+  margin-bottom:6px;
+  overflow:hidden;
+}
+.event-header{
+  background:linear-gradient(90deg,#000080,#1084d0);
+  color:#fff;padding:3px 6px;font-size:11px;font-weight:bold;
+  display:flex;align-items:center;gap:4px;
+}
+.event-body{padding:6px;font-size:11px;line-height:1.7;}
+.event-body b{font-weight:bold;}
+.event-tag{
+  display:inline-block;
+  background:#000080;color:#fff;
+  font-size:9px;padding:1px 5px;margin:1px;
+}
+.event-map-btn{
+  display:block;width:100%;
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  padding:4px;font-size:11px;font-weight:bold;
+  cursor:pointer;text-align:center;margin-top:4px;
+}
+.event-map-btn:active{border-color:#808080 #fff #fff #808080;}
+
+/* ════════════════════════════════
+   TRANSPORT WINDOW
+════════════════════════════════ */
+.transport-section{padding:6px;}
+.transport-box{
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  background:#c0c0c0;margin-bottom:6px;
+}
+.transport-box-title{
+  background:#000080;color:#fff;
+  padding:2px 6px;font-size:11px;font-weight:bold;
+}
+.transport-box-body{padding:6px;font-size:11px;line-height:1.8;}
+.transport-highlight{
+  background:#ffff00;color:#000;
+  font-weight:bold;padding:1px 4px;
+}
+.metro-line{
+  display:flex;align-items:center;gap:6px;
+  padding:2px 0;font-size:11px;
+}
+.metro-dot{
+  width:12px;height:12px;border-radius:50%;
+  border:1px solid #000;flex-shrink:0;
+}
+
+/* ════════════════════════════════
+   MAP MODAL
+════════════════════════════════ */
+#map-dialog{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.5);
+  display:none;align-items:center;justify-content:center;
+  z-index:999;
+}
+#map-dialog.open{display:flex;}
+.map-dialog-win{
+  background:#c0c0c0;
+  border:3px solid;border-color:#fff #808080 #808080 #fff;
+  width:88%;max-width:320px;
+}
+.map-dialog-title{
+  background:linear-gradient(90deg,#000080,#1084d0);
+  color:#fff;padding:3px 6px;font-size:11px;font-weight:bold;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.map-dialog-body{padding:12px;display:flex;flex-direction:column;gap:8px;}
+.map-dialog-name{font-size:13px;font-weight:bold;margin-bottom:4px;}
+.map-dialog-kr{font-size:11px;color:#808080;margin-bottom:8px;}
+.map-choice-btn{
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  padding:8px;font-size:12px;font-weight:bold;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+}
+.map-choice-btn:active{border-color:#808080 #fff #fff #808080;}
+.map-choice-btn .map-logo{font-size:18px;}
+.map-dialog-cancel{
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  padding:4px;font-size:11px;
+  cursor:pointer;width:100%;text-align:center;margin-top:4px;
+}
+.map-dialog-cancel:active{border-color:#808080 #fff #fff #808080;}
+
+/* ════════════════════════════════
+   PROGRESS
+════════════════════════════════ */
+.progress-bar-wrap{
+  border:2px solid;border-color:#808080 #fff #fff #808080;
+  background:#fff;height:16px;margin:4px 0;
+  position:relative;overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  background:repeating-linear-gradient(
+    45deg,#000080,#000080 4px,#1084d0 4px,#1084d0 8px
+  );
+  transition:width 0.4s;
+}
+.progress-text{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:bold;color:#000;
+  mix-blend-mode:difference;filter:invert(1);
+}
+
+/* ════════════════════════════════
+   CHECKED SPOT STYLE
+════════════════════════════════ */
+.folder-icon.checked .ficon{opacity:0.45;filter:grayscale(1);}
+.folder-icon.checked .fname{color:#808080;text-decoration:line-through;}
+
+/* status open/closed */
+.status-open{color:#008000;font-weight:bold;}
+.status-closed{color:#800000;font-weight:bold;}
+
+/* ════════════════════════════════
+   SCROLLBAR GLOBAL
+════════════════════════════════ */
+#icon-grid::-webkit-scrollbar{width:14px;}
+#icon-grid::-webkit-scrollbar-track{background:#008080;}
+#icon-grid::-webkit-scrollbar-thumb{
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+}
+
+/* ════════════════════════════════
+   WEATHER POPUP
+════════════════════════════════ */
+#weather-popup{
+  position:fixed;top:32px;right:4px;
+  background:#c0c0c0;
+  border:2px solid;border-color:#fff #808080 #808080 #fff;
+  padding:10px 12px;
+  z-index:900;font-size:12px;line-height:2;
+  display:none;min-width:160px;
+}
+#weather-popup.open{display:block;}
+#weather-popup .wp-title{
+  background:#000080;color:#fff;
+  margin:-10px -12px 8px;padding:2px 6px;font-size:11px;font-weight:bold;
+}
+
+/* ════════════════════════════════
+   METRO MAP WINDOW
+════════════════════════════════ */
+.metro-map-wrap{
+  padding:8px;
+  background:#f4f4f4;
+  min-height:100%;
+}
+.metro-map-toolbar{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.metro-filter-btn{
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#fff #808080 #808080 #fff;
+  padding:4px 8px;
+  font-size:11px;
+  font-family:inherit;
+  cursor:pointer;
+}
+.metro-filter-btn:active,
+.metro-filter-btn.active{
+  border-color:#808080 #fff #fff #808080;
+  background:#a0a0a0;
+}
+.metro-map-card{
+  background:#fff;
+  border:2px solid;
+  border-color:#808080 #fff #fff #808080;
+  padding:8px;
+  overflow:auto;
+}
+.metro-line-card{
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#fff #808080 #808080 #fff;
+  margin-bottom:8px;
+  padding:6px;
+}
+.metro-line-title{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+.metro-line-color{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:1px solid #000;
+  flex-shrink:0;
+}
+.metro-station-row{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  overflow-x:auto;
+  padding:4px 0;
+}
+.metro-station{
+  background:#fff;
+  border:1px solid #808080;
+  padding:3px 6px;
+  font-size:10px;
+  white-space:nowrap;
+  border-radius:10px;
+}
+.metro-arrow{
+  font-size:11px;
+  color:#404040;
+}
+.metro-note{
+  font-size:11px;
+  line-height:1.7;
+  margin-top:8px;
+  background:#ffffcc;
+  border:1px solid #808080;
+  padding:6px;
+}
+.metro-svg-box{
+  background:#fff;
+  border:2px solid;
+  border-color:#808080 #fff #fff #808080;
+  margin-bottom:8px;
+  overflow:auto;
+}
+.metro-svg-box svg{
+  min-width:680px;
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+
+/* ════════════════════════════════
+   TRAVEL INFO WINDOWS
+════════════════════════════════ */
+.travel-info-wrap{
+  padding:8px;
+  font-family:'Courier New', monospace;
+  font-size:11px;
+  line-height:1.75;
+  background:#fff;
+  min-height:100%;
+  white-space:pre-wrap;
+}
+.travel-info-title{
+  font-family:'MS Sans Serif','Noto Sans KR',sans-serif;
+  font-size:13px;
+  font-weight:bold;
+  background:#000080;
+  color:#fff;
+  padding:4px 6px;
+  margin:-8px -8px 8px -8px;
+}
+.travel-info-section{
+  border-top:1px dashed #808080;
+  margin-top:8px;
+  padding-top:8px;
+}
+.travel-info-highlight{
+  display:inline-block;
+  background:#ffff00;
+  color:#000;
+  font-weight:bold;
+  padding:0 4px;
+}
+.travel-info-btn-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+.travel-info-btn{
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#fff #808080 #808080 #fff;
+  padding:4px 8px;
+  font-size:11px;
+  font-family:inherit;
+  cursor:pointer;
+}
+.travel-info-btn:active{
+  border-color:#808080 #fff #fff #808080;
+}
+
+</style>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js">
+// ════════════════════════════════
+// TRAVEL MAP
+// ════════════════════════════════
+let travelMap = null;
+let mapMarkers = [];
+
+function openTravelMap(){
+  openWindow('map-win');
+
+  setTimeout(() => {
+    if(!travelMap){
+      travelMap = L.map('travel-map').setView([37.5665,126.9780], 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:'© OpenStreetMap'
+      }).addTo(travelMap);
+    }
+
+    travelMap.invalidateSize();
+    showMapDay('all');
+  }, 200);
+}
+
+function showMapDay(dayId){
+  if(!travelMap) return;
+
+  mapMarkers.forEach(marker => {
+    travelMap.removeLayer(marker);
+  });
+
+  mapMarkers = [];
+
+  Object.entries(DAYS).forEach(([id, day]) => {
+
+    if(dayId !== 'all' && id !== dayId) return;
+
+    day.spots.forEach(spot => {
+
+      if(!spot.lat || !spot.lng) return;
+
+      const marker = L.marker([spot.lat, spot.lng]).addTo(travelMap);
+
+      marker.bindPopup(`
+        <div style="font-family:sans-serif;font-size:12px;line-height:1.6;">
+          <b>${spot.emoji} ${spot.name}</b><br>
+          ${spot.kr}<br>
+          ${day.label}<br>
+          ⏰ ${spot.hours}
+        </div>
+      `);
+
+      mapMarkers.push(marker);
+    });
+  });
+
+  if(mapMarkers.length > 0){
+    const group = L.featureGroup(mapMarkers);
+    travelMap.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
+
+// ════════════════════════════════
+// KOREAN SPEECH
+// ════════════════════════════════
+function speakKorean(text){
+  if(!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ko-KR';
+  utter.rate = 0.9;
+  utter.pitch = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const koVoice = voices.find(v => v.lang.includes('ko'));
+  if(koVoice) utter.voice = koVoice;
+
+  window.speechSynthesis.speak(utter);
+}
+
+
+// ════════════════════════════════
+// METRO MAP
+// ════════════════════════════════
+const METRO_LINES = [
+  {
+    id:'line2',
+    name:'2號線｜綠線',
+    color:'#00A84D',
+    days:['d1','d2','d3','d4','d5'],
+    stations:['弘大入口','合井','新堂','東大門歷史文化公園','聖水','建大入口']
+  },
+  {
+    id:'line3',
+    name:'3號線｜橘線',
+    color:'#EF7C1C',
+    days:['d2'],
+    stations:['景福宮','安國','鍾路3街','乙支路3街','忠武路']
+  },
+  {
+    id:'line4',
+    name:'4號線｜藍線',
+    color:'#00A5DE',
+    days:['d3'],
+    stations:['惠化','東大門','東大門歷史文化公園','明洞','首爾站']
+  },
+  {
+    id:'line5',
+    name:'5號線｜紫線',
+    color:'#996CAC',
+    days:['d2','d3'],
+    stations:['弘大入口','光化門','鍾路3街','乙支路4街','東大門歷史文化公園']
+  },
+  {
+    id:'line6',
+    name:'6號線｜咖啡線',
+    color:'#CD7C2F',
+    days:['d4','d5'],
+    stations:['上水','合井','望遠','梨泰院','藥水']
+  },
+  {
+    id:'line7',
+    name:'7號線｜橄欖綠線',
+    color:'#747F00',
+    days:['d3'],
+    stations:['建大入口','뚝섬유원지','高速巴士客運站']
+  },
+  {
+    id:'line9',
+    name:'9號線｜金線',
+    color:'#BDB092',
+    days:['d3'],
+    stations:['高速巴士客運站','新盤浦','舊盤浦','銅雀']
+  },
+  {
+    id:'arex',
+    name:'AREX｜機場快線',
+    color:'#0090D2',
+    days:['d1','d5'],
+    stations:['仁川機場T1','金浦機場','弘大入口','孔德','首爾站']
+  },
+  {
+    id:'gyeongui',
+    name:'京義中央線｜薄綠線',
+    color:'#77C4A3',
+    days:['d4','d5'],
+    stations:['弘大入口','加佐','數碼媒體城']
+  }
+];
+
+function renderMetroSvg(filterDay){
+  const lines = METRO_LINES.filter(line => filterDay === 'all' || line.days.includes(filterDay));
+  const height = Math.max(220, lines.length * 54 + 40);
+  const width = 760;
+  let svg = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Seoul subway simplified map">
+    <rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff"/>
+    <text x="20" y="24" font-size="16" font-family="MS Sans Serif, Arial" font-weight="bold">SEOUL SUBWAY QUICK MAP</text>
+  `;
+
+  lines.forEach((line, idx) => {
+    const y = 58 + idx * 54;
+    const x1 = 110;
+    const x2 = 700;
+    svg += `
+      <text x="18" y="${y+5}" font-size="12" font-family="MS Sans Serif, Arial" font-weight="bold">${line.name}</text>
+      <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${line.color}" stroke-width="8" stroke-linecap="round"/>
+    `;
+
+    const count = line.stations.length;
+    line.stations.forEach((station, sidx) => {
+      const x = x1 + (x2 - x1) * (sidx / Math.max(1, count - 1));
+      svg += `
+        <circle cx="${x}" cy="${y}" r="7" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="${x}" y="${y+22}" font-size="10" font-family="MS Sans Serif, Arial" text-anchor="middle">${station}</text>
+      `;
+    });
+  });
+
+  svg += `</svg>`;
+  document.getElementById('metro-svg-box').innerHTML = svg;
+}
+
+function renderMetroMap(filterDay='all', btn=null){
+  document.querySelectorAll('.metro-filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  renderMetroSvg(filterDay);
+
+  const lines = METRO_LINES.filter(line => filterDay === 'all' || line.days.includes(filterDay));
+
+  document.getElementById('metro-map-list').innerHTML = lines.map(line => `
+    <div class="metro-line-card">
+      <div class="metro-line-title">
+        <span class="metro-line-color" style="background:${line.color}"></span>
+        ${line.name}
+      </div>
+      <div class="metro-station-row">
+        ${line.stations.map((station, index) => `
+          <span class="metro-station">${station}</span>
+          ${index < line.stations.length - 1 ? '<span class="metro-arrow">→</span>' : ''}
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderMetroMap('all');
+});
+
+
+// ════════════════════════════════
+// TRAVEL INFO MODULES
+// ════════════════════════════════
+const TRAVEL_INFO = {
+  immigration:{
+    icon:'🛂',
+    title:'通關流程.exe',
+    status:'KOREA ARRIVAL PROCESS',
+    content:`🇰🇷 韓國入境 / 通關資料填寫流程
+
+STEP 1｜出發前先準備
+────────────────────────
+□ 護照
+□ 回程機票
+□ 韓國住宿地址
+□ 第一晚住宿電話
+□ 航班號碼
+□ 旅遊天數與目的
+
+常用英文：
+Purpose of visit：Travel / Tourism
+Address in Korea：填住宿地址
+Length of stay：5 days
+
+STEP 2｜電子入境申報 / 入境卡
+────────────────────────
+韓國近年逐步推行電子入境卡與線上申報。
+通常可以在出發前線上填寫，或抵達機場後依現場指示填寫。
+
+會需要：
+- 護照資料
+- 航班號碼
+- 韓國住宿地址
+- 聯絡方式
+- 入境目的
+
+STEP 3｜抵達仁川機場
+────────────────────────
+跟著：
+ARRIVAL / 입국
+指示前往入境審查。
+
+STEP 4｜外國人入境審查
+────────────────────────
+準備護照。
+可能會被問：
+
+Q：How long will you stay?
+A：Five days.
+
+Q：What is the purpose of your visit?
+A：Travel.
+
+Q：Where will you stay?
+A：I’m staying in Hongdae.
+
+STEP 5｜領行李
+────────────────────────
+看航班號碼找到行李轉盤。
+
+STEP 6｜海關申報
+────────────────────────
+沒有需要申報的東西：
+走 Nothing to Declare / 綠色通道。
+
+STEP 7｜出機場後
+────────────────────────
+建議順序：
+1. 買 / 領 WOWPASS 或 T-money
+2. 買 AREX 車票
+3. 搭 AREX 到弘大入口
+4. 到住宿放行李
+
+小提醒：
+- 住宿地址建議先存在手機截圖
+- 網路還沒連上時也能給海關看
+- 入境審查通常不用講太多，簡單回答即可`
+  },
+
+  delivery:{
+    icon:'🍗',
+    title:'韓國外送.exe',
+    status:'FOOD DELIVERY GUIDE',
+    content:`🍗 外國人在韓國如何叫外送？
+
+最推薦：Shuttle Delivery
+────────────────────────
+對外國旅客最友善。
+
+優點：
+✅ 有英文介面
+✅ 可用外國信用卡
+✅ 不一定需要韓國手機號碼
+✅ 弘大、梨泰院、聖水等區域常可使用
+
+使用流程：
+1. 打開 Shuttle Delivery
+2. 輸入住宿地址
+3. 選餐廳
+4. 刷卡付款
+5. 等外送送達
+
+常點類型：
+- 炸雞
+- 漢堡
+- 咖哩
+- 墨西哥料理
+- 韓式便當
+- 咖啡甜點
+
+韓文備註可用：
+문 앞에 놓아 주세요
+請放在門口。
+
+배달 도착하면 연락 주세요
+送到時請聯絡我。
+
+其他平台
+────────────────────────
+Coupang Eats：
+部分情況外國人可用，但通常需要韓國電話或帳號條件。
+
+Baemin / 배달의민족：
+韓國人最常用，但對外國旅客比較不友善。
+通常需要韓國手機認證，韓文介面也比較多。
+
+外送文化小提醒
+────────────────────────
+- 韓國通常不用給小費
+- 很多外送會放在門口
+- 有些大樓需要門禁密碼
+- 住宿是飯店的話，可能只能送到大廳
+- 深夜炸雞、宵夜選擇很多
+
+建議寫給外送員：
+저는 외국인이라 한국어를 잘 못해요.
+문 앞에 놓아 주세요.
+我是外國人，韓文不太好，請放門口。`
+  },
+
+  bike:{
+    icon:'🚲',
+    title:'租腳踏車.exe',
+    status:'SEOUL BIKE GUIDE',
+    content:`🚲 外國人在首爾如何租腳踏車？
+
+首爾共享腳踏車：따릉이 / Seoul Bike
+────────────────────────
+可以想像成韓國版 YouBike。
+漢江、首爾林、汝矣島一帶都很適合騎。
+
+外國人可以用嗎？
+────────────────────────
+✅ 可以。
+
+通常需要：
+- 信用卡
+- Seoul Bike App
+- 可上網的手機
+- 部分情況可能需要電話驗證
+
+最推薦旅客：
+1 Day Pass / 一日券
+
+使用流程
+────────────────────────
+STEP 1
+下載 Seoul Bike App
+
+STEP 2
+選擇外國人 / Foreigner
+
+STEP 3
+選擇 1 Day Pass
+
+STEP 4
+刷卡付款
+
+STEP 5
+到腳踏車站點掃 QR Code
+
+STEP 6
+解鎖後開始騎乘
+
+推薦騎乘地點
+────────────────────────
+🌉 盤浦漢江公園
+適合搭配彩虹噴泉、潛水橋市集。
+
+🌿 首爾林 / 서울숲
+適合聖水行程順路。
+
+🏙 汝矣島漢江公園
+視野開闊，適合看夕陽。
+
+注意事項
+────────────────────────
+- 漢江風很大
+- 春天晚上可能偏冷
+- 韓國部分路段坡度明顯
+- 騎車請靠右
+- 晚上一定要注意燈光
+- 還車要確認 App 顯示已完成
+
+實用韓文：
+자전거 대여소가 어디예요?
+腳踏車租借站在哪裡？
+
+반납했어요.
+我已經還車了。`
+  },
+
+  cards:{
+    icon:'💳',
+    title:'交通卡大全.exe',
+    status:'WOWPASS / T-MONEY / CLIMATE CARD',
+    content:`💳 韓國交通卡使用方式
+
+推薦組合
+────────────────────────
+如果你是觀光客：
+
+WOWPASS + 氣候同行卡
+很適合。
+
+WOWPASS 負責：
+- 消費
+- 換匯
+- 備用交通卡
+
+氣候同行卡負責：
+- 首爾市區地鐵 / 公車無限搭
+
+────────────────────────
+1｜WOWPASS
+────────────────────────
+什麼是 WOWPASS？
+
+像是：
+外國旅客專用的韓國預付卡。
+
+功能：
+✅ VISA 消費
+✅ 韓幣儲值
+✅ 換匯
+✅ 可當 T-money 交通卡使用
+
+購買方式：
+1. 找 WOWPASS 機台
+2. 掃描護照
+3. 放入現金
+4. 製作卡片
+5. 下載 App 綁定
+
+常見地點：
+- 仁川機場
+- 弘大
+- 明洞
+- 東大門
+- 主要飯店 / 車站附近
+
+重要注意：
+WOWPASS 有兩個餘額：
+
+A. 消費餘額
+B. T-money 交通餘額
+
+交通餘額要另外儲值，
+不是卡片有錢就一定能搭車。
+
+────────────────────────
+2｜T-money
+────────────────────────
+韓國最基本交通卡。
+
+可用：
+✅ 地鐵
+✅ 公車
+✅ 部分計程車
+✅ 超商小額消費
+
+購買地點：
+- CU
+- GS25
+- 7-Eleven
+- 地鐵站
+
+價格：
+卡片通常 ₩3,000～₩5,000
+不含儲值金。
+
+如何儲值：
+1. 到地鐵站加值機
+2. 選中文 / English
+3. 放上 T-money
+4. 放入現金
+5. 完成儲值
+
+注意：
+地鐵站加值機很多只能用現金。
+
+────────────────────────
+3｜氣候同行卡 / Climate Card
+────────────────────────
+首爾市區無限搭交通卡。
+
+適合：
+每天會一直搭地鐵 / 公車的人。
+
+可搭：
+✅ 首爾地鐵
+✅ 首爾市區公車
+✅ 部分區域交通
+
+不一定包含：
+❌ AREX 直達車
+❌ 機場巴士
+❌ 部分非首爾區域路線
+❌ 部分新盆唐線等特殊路線
+
+購買方式：
+- 地鐵站服務台
+- 部分便利商店
+
+使用流程：
+1. 購買實體卡
+2. 到加值機選擇天數方案
+3. 付款開通
+4. 進站感應使用
+
+旅遊建議：
+如果你 5/8–5/12 都在首爾市區移動，
+可以考慮 5 日方案。
+
+你的行程中常用：
+- 弘大入口
+- 聖水
+- 安國
+- 鍾路3街
+- 東大門
+- 盤浦漢江
+- 望遠
+
+────────────────────────
+簡單選擇法
+────────────────────────
+只想簡單：
+T-money
+
+想少換錢、可刷卡：
+WOWPASS
+
+每天搭很多地鐵：
+氣候同行卡
+
+最舒服組合：
+WOWPASS + 氣候同行卡`
+  }
+};
+
+function openTravelInfo(type){
+  const data = TRAVEL_INFO[type];
+  if(!data) return;
+
+  document.getElementById('travel-info-icon').textContent = data.icon;
+  document.getElementById('travel-info-window-title').textContent = data.title + ' — 記事本';
+  document.getElementById('travel-info-status').textContent = data.status;
+
+  document.getElementById('travel-info-content').innerHTML =
+    `<div class="travel-info-title">${data.icon} ${data.title}</div>` +
+    data.content.replace(/\n/g,'<br>') +
+    `<div class="travel-info-btn-row">
+      <button class="travel-info-btn" onclick="closeWindow('travel-info-win')">關閉</button>
+    </div>`;
+
+  openWindow('travel-info-win');
+}
+
+</script>
+
+</head>
+<body>
+
+<!-- ════ DESKTOP ════ -->
+<div id="desktop">
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div id="topbar-left">🇰🇷 孤芳小隊 × 搜ㄦ篇</div>
+    <div id="topbar-right">
+      <div id="weather-mini" onclick="toggleWeather()">🌤 --°C</div>
+      <div id="clock">--:--</div>
+    </div>
+  </div>
+
+  <!-- WEATHER POPUP -->
+  <div id="weather-popup">
+    <div class="wp-title">首爾即時天氣</div>
+    <div id="weather-detail">載入中...</div>
+  </div>
+
+  <!-- ICON GRID -->
+  <div id="icon-grid">
+    <div class="desktop-icon" onclick="openFolder('d1')">
+      <div class="icon-img">📁</div>
+      <div class="icon-label">D1_聖水日<br><span style="font-size:9px;opacity:0.8">5/8 FRI</span></div>
+    </div>
+    <div class="desktop-icon" onclick="openFolder('d2')">
+      <div class="icon-img">📁</div>
+      <div class="icon-label">D2_北村西巡<br><span style="font-size:9px;opacity:0.8">5/9 SAT</span></div>
+    </div>
+    <div class="desktop-icon" onclick="openFolder('d3')">
+      <div class="icon-img">🌟</div>
+      <div class="icon-label">D3_漢江日<br><span style="font-size:9px;opacity:0.8">5/10 SUN</span></div>
+    </div>
+    <div class="desktop-icon" onclick="openFolder('d4')">
+      <div class="icon-img">📁</div>
+      <div class="icon-label">D4_延南日<br><span style="font-size:9px;opacity:0.8">5/11 MON</span></div>
+    </div>
+    <div class="desktop-icon" onclick="openFolder('d5')">
+      <div class="icon-img">📁</div>
+      <div class="icon-label">D5_望遠收尾<br><span style="font-size:9px;opacity:0.8">5/12 TUE</span></div>
+    </div>
+    <div class="desktop-icon" onclick="openWindow('events-win')">
+      <div class="icon-img">🎪</div>
+      <div class="icon-label">市集活動.txt</div>
+    </div>
+    <div class="desktop-icon" onclick="openWindow('phrases-win')">
+      <div class="icon-img">📝</div>
+      <div class="icon-label">韓語速查.txt</div>
+    </div>
+    <div class="desktop-icon" onclick="openWindow('transport-win')">
+      <div class="icon-img">✈️</div>
+      <div class="icon-label">交通攻略.txt</div>
+    </div>
+    
+    <div class="desktop-icon" onclick="openTravelMap()">
+      <div class="icon-img">🗺️</div>
+      <div class="icon-label">旅遊地圖.exe</div>
+    </div>
+
+    
+    
+    <div class="desktop-icon" onclick="openTravelInfo('immigration')">
+      <div class="icon-img">🛂</div>
+      <div class="icon-label">通關流程.exe</div>
+    </div>
+    <div class="desktop-icon" onclick="openTravelInfo('delivery')">
+      <div class="icon-img">🍗</div>
+      <div class="icon-label">韓國外送.exe</div>
+    </div>
+    <div class="desktop-icon" onclick="openTravelInfo('bike')">
+      <div class="icon-img">🚲</div>
+      <div class="icon-label">租腳踏車.exe</div>
+    </div>
+    <div class="desktop-icon" onclick="openTravelInfo('cards')">
+      <div class="icon-img">💳</div>
+      <div class="icon-label">交通卡大全.exe</div>
+    </div>
+
+    <div class="desktop-icon" onclick="openWindow('metro-win')">
+      <div class="icon-img">🚇</div>
+      <div class="icon-label">地鐵路線圖.bmp</div>
+    </div>
+
+    <div class="desktop-icon" onclick="openWindow('progress-win')">
+      <div class="icon-img">📊</div>
+      <div class="icon-label">打卡進度.exe</div>
+    </div>
+  </div>
+
+  <!-- TASKBAR -->
+  <div id="taskbar">
+    <button id="start-btn" onclick="closeAllWindows()">
+      <span id="start-btn-icon">🪟</span>開始
+    </button>
+    <div class="taskbar-items" id="taskbar-items"></div>
+  </div>
+</div>
+
+<!-- ════ FOLDER WINDOW (Day) ════ -->
+<div class="win" id="folder-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon" id="folder-win-icon">📁</span>
+      <span id="folder-win-title">D1_聖水日</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('folder-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('folder-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">編輯(E)</span>
+    <span class="menu-item">檢視(V)</span>
+  </div>
+  <div class="win-addressbar">
+    <span class="addr-label">位址：</span>
+    <input class="addr-input" id="folder-addr" readonly value="C:\SEOUL\D1">
+  </div>
+  <div class="win-content">
+    <div id="folder-progress" style="padding:6px 6px 0;">
+      <div style="font-size:10px;margin-bottom:2px;">今日打卡進度：</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="folder-progress-fill" style="width:0%"></div>
+        <div class="progress-text" id="folder-progress-text">0 / 0</div>
+      </div>
+    </div>
+    <div class="folder-grid" id="folder-grid"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item" id="folder-status">0 個項目</span>
+    <span class="status-item" id="folder-day-info"></span>
+  </div>
+</div>
+
+<!-- ════ NOTEPAD WINDOW (Spot detail) ════ -->
+<div class="win" id="notepad-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">📝</span>
+      <span id="notepad-win-title">記事本</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('notepad-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('notepad-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">格式(O)</span>
+    <span class="menu-item">說明(H)</span>
+  </div>
+  <div class="win-content">
+    <div class="notepad-content" id="notepad-content"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item" id="notepad-status">第1行，第1欄</span>
+  </div>
+</div>
+
+<!-- ════ EVENTS WINDOW ════ -->
+<div class="win" id="events-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">🎪</span>
+      <span>市集活動.txt — 記事本</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('events-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('events-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">格式(O)</span>
+  </div>
+  <div class="win-content">
+    <div class="event-list" id="events-content"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item">3 個活動 · 5/8–5/12期間</span>
+  </div>
+</div>
+
+<!-- ════ PHRASES WINDOW ════ -->
+<div class="win" id="phrases-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">📝</span>
+      <span>韓語速查.txt</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('phrases-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('phrases-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">點擊卡片翻面看韓文發音</span>
+  </div>
+  <div class="win-content">
+    <div class="phrase-grid" id="phrase-grid"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item">15 個常用語句</span>
+  </div>
+</div>
+
+<!-- ════ TRANSPORT WINDOW ════ -->
+<div class="win" id="transport-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">✈️</span>
+      <span>交通攻略.txt — 記事本</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('transport-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('transport-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">格式(O)</span>
+  </div>
+  <div class="win-content">
+    <div class="transport-section" id="transport-content"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item">BR170 去 · TR873 回 · 氣候同行卡</span>
+  </div>
+</div>
+
+<!-- ════ PROGRESS WINDOW ════ -->
+<div class="win" id="progress-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">📊</span>
+      <span>打卡進度.exe</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('progress-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('progress-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-content">
+    <div id="progress-content" style="padding:10px;font-size:12px;line-height:2;"></div>
+  </div>
+</div>
+
+
+
+
+<!-- ════ TRAVEL INFO WINDOW ════ -->
+<div class="win" id="travel-info-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon" id="travel-info-icon">🛂</span>
+      <span id="travel-info-window-title">旅遊資料.txt</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('travel-info-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('travel-info-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">編輯(E)</span>
+    <span class="menu-item">檢視(V)</span>
+    <span class="menu-item">說明(H)</span>
+  </div>
+  <div class="win-content">
+    <div class="travel-info-wrap" id="travel-info-content"></div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item" id="travel-info-status">SEOUL TRAVEL NOTE</span>
+  </div>
+</div>
+
+
+<!-- ════ METRO MAP WINDOW ════ -->
+<div class="win" id="metro-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">🚇</span>
+      <span>地鐵路線圖.bmp</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('metro-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('metro-win')">✕</button>
+    </div>
+  </div>
+  <div class="win-menubar">
+    <span class="menu-item">檔案(F)</span>
+    <span class="menu-item">檢視(V)</span>
+    <span class="menu-item">說明(H)</span>
+  </div>
+  <div class="win-content">
+    <div class="metro-map-wrap">
+      <div class="metro-map-toolbar">
+        <button class="metro-filter-btn active" onclick="renderMetroMap('all', this)">全部</button>
+        <button class="metro-filter-btn" onclick="renderMetroMap('d1', this)">D1 聖水</button>
+        <button class="metro-filter-btn" onclick="renderMetroMap('d2', this)">D2 北村</button>
+        <button class="metro-filter-btn" onclick="renderMetroMap('d3', this)">D3 漢江</button>
+        <button class="metro-filter-btn" onclick="renderMetroMap('d4', this)">D4 延南</button>
+        <button class="metro-filter-btn" onclick="renderMetroMap('d5', this)">D5 望遠</button>
+      </div>
+
+      <div class="metro-svg-box" id="metro-svg-box"></div>
+      <div id="metro-map-list"></div>
+
+      <div class="metro-note">
+        💾 小提示：這是「旅行用簡化版」地鐵圖，重點標出你行程會用到的站點與路線，不是完整首爾地鐵官方路線圖。<br>
+        ✈ 機場去程：仁川機場 → AREX → 弘大入口。<br>
+        🚇 市區移動：弘大入口、聖水、安國、鍾路3街、東大門、盤浦漢江、望遠最常用。
+      </div>
+    </div>
+  </div>
+  <div class="win-statusbar">
+    <span class="status-item">SEOUL SUBWAY QUICK MAP</span>
+  </div>
+</div>
+
+
+<!-- ════ MAP WINDOW ════ -->
+<div class="win" id="map-win">
+  <div class="win-title">
+    <div class="win-title-left">
+      <span class="win-title-icon">🗺️</span>
+      <span>旅遊地圖.exe</span>
+    </div>
+    <div class="win-controls">
+      <button class="win-btn" onclick="closeWindow('map-win')">_</button>
+      <button class="win-btn close-btn" onclick="closeWindow('map-win')">✕</button>
+    </div>
+  </div>
+
+  <div class="win-menubar">
+    <span class="menu-item" onclick="showMapDay('all')">全部</span>
+    <span class="menu-item" onclick="showMapDay('d1')">D1</span>
+    <span class="menu-item" onclick="showMapDay('d2')">D2</span>
+    <span class="menu-item" onclick="showMapDay('d3')">D3</span>
+    <span class="menu-item" onclick="showMapDay('d4')">D4</span>
+    <span class="menu-item" onclick="showMapDay('d5')">D5</span>
+  </div>
+
+  <div class="win-content" style="margin:2px;">
+    <div id="travel-map" style="width:100%;height:100%;min-height:500px;"></div>
+  </div>
+
+  <div class="win-statusbar">
+    <span class="status-item">SEOUL MAP SYSTEM</span>
+  </div>
+</div>
+
+
+<!-- ════ MAP DIALOG ════ -->
+<div id="map-dialog">
+  <div class="map-dialog-win">
+    <div class="map-dialog-title">
+      <span>📍 選擇地圖</span>
+      <button class="win-btn close-btn" onclick="closeMapDialog()" style="background:#c0c0c0;">✕</button>
+    </div>
+    <div class="map-dialog-body">
+      <div class="map-dialog-name" id="map-spot-name"></div>
+      <div class="map-dialog-kr" id="map-spot-kr"></div>
+      <button class="map-choice-btn" id="btn-google">
+        <span class="map-logo">🗺</span> Google Maps
+      </button>
+      <button class="map-choice-btn" id="btn-kakao" style="background:#FFCD00;">
+        <span class="map-logo">🟡</span> Kakao Map
+      </button>
+      <button class="map-dialog-cancel" onclick="closeMapDialog()">취소 · 取消</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════
+// DATA
+// ════════════════════════════════
+const DAYS = {
+  d1:{label:'D1_聖水日',date:'5/8 FRI',icon:'📁',addr:'C:\\SEOUL\\D1_聖水日',spots:[
+    {id:'d1-01',name:'Honghwadon',kr:'홍화돈',emoji:'🥩',cat:'food',desc:'聖水人氣烤肉\n午餐首選',hours:'11:30–22:00',closed:'週一',lat:37.5448,lng:127.0557,tags:['烤肉','午餐']},
+    {id:'d1-02',name:'ANGLAN',kr:'앙글란',emoji:'🛍️',cat:'shop',desc:'聖水人氣選物店',hours:'12:00–20:00',closed:'週一',lat:37.5443,lng:127.0563,tags:['選物']},
+    {id:'d1-03',name:'goodrunner 숲점',kr:'굿러너컴퍼니',emoji:'👟',cat:'shop',desc:'跑步用品老屋選物\n稀有跑鞋聖地',hours:'12:00–20:00',closed:'週二',lat:37.5455,lng:127.0472,tags:['跑步','選品']},
+    {id:'d1-04',name:'쎄임더스트',kr:'쎄임더스트',emoji:'📚',cat:'shop',desc:'阿斗啊獨立書店',hours:'13:00–20:00',closed:'週一',lat:37.5441,lng:127.0558,tags:['書店']},
+    {id:'d1-05',name:'Rockfish',kr:'록피쉬',emoji:'🎽',cat:'shop',desc:'聖水選物店',hours:'12:00–20:00',closed:'無',lat:37.5446,lng:127.0561,tags:['選物']},
+    {id:'d1-06',name:'Minari Seongsu',kr:'능동미나리성수',emoji:'🌿',cat:'food',desc:'水芹菜料理\n清爽韓式餐廳',hours:'11:30–21:00',closed:'週一',lat:37.5461,lng:127.0598,tags:['韓食']},
+    {id:'d1-07',name:'niceghostclub',kr:'나이스고스트클럽',emoji:'👻',cat:'shop',desc:'聖水個性選物',hours:'12:00–20:00',closed:'無',lat:37.5449,lng:127.0554,tags:['選物']},
+    {id:'d1-08',name:'GASSTATION',kr:'개스스테이션',emoji:'⛽',cat:'shop',desc:'改裝加油站個性空間',hours:'12:00–20:00',closed:'無',lat:37.5452,lng:127.0548,tags:['選物']},
+    {id:'d1-09',name:'entripaper',kr:'엔트리페이퍼',emoji:'📄',cat:'shop',desc:'紙品文具選物',hours:'12:00–19:00',closed:'週一',lat:37.5444,lng:127.0566,tags:['文具']},
+    {id:'d1-10',name:'PARAMADE PICKERS',kr:'파라메이드피커스',emoji:'🎩',cat:'shop',desc:'二手帽子專賣店',hours:'13:00–20:00',closed:'週一',lat:37.5447,lng:127.0559,tags:['二手','帽子']},
+    {id:'d1-11',name:'NOmal A bookstore',kr:'노멀에이서점',emoji:'📖',cat:'shop',desc:'獨立書店\n設計藝術選書',hours:'12:00–20:00',closed:'週一',lat:37.5443,lng:127.0562,tags:['書店']},
+    {id:'d1-12',name:'山清 黑豬肉 ★',kr:'산청숯불구이',emoji:'🍖',cat:'food',highlight:true,desc:'今日晚餐！\n黑豬肉炭火燒烤\nD1必吃',hours:'17:00–23:00',closed:'無',lat:37.5455,lng:127.0571,tags:['烤肉','必吃']},
+    {id:'d1-13',name:'Music Complex',kr:'뮤직컴플렉스서울',emoji:'🎵',cat:'shop',desc:'音樂複合空間\n黑膠唱片選品',hours:'13:00–21:00',closed:'週一',lat:37.5459,lng:127.0563,tags:['唱片']}
+  ]},
+  d2:{label:'D2_北村西巡',date:'5/9 SAT',icon:'📁',addr:'C:\\SEOUL\\D2_北村西巡',spots:[
+    {id:'d2-01',name:'NB Bukchon 晨跑 ★',kr:'뉴발란스북촌점',emoji:'🏃',cat:'activity',highlight:true,desc:'08:00開門！\nNB北村租借裝備\n景福宮周邊晨跑',hours:'08:00–21:00',closed:'無',lat:37.5836,lng:126.9826,tags:['跑步','晨跑']},
+    {id:'d2-02',name:'Artist Bakery',kr:'아티스트베이커리',emoji:'🥐',cat:'food',desc:'北村人氣麵包店\n早餐首選',hours:'08:00–18:00',closed:'週一',lat:37.5824,lng:126.9831,tags:['麵包','早餐']},
+    {id:'d2-03',name:'倫敦貝果 安國店',kr:'런던베이글뮤지엄',emoji:'🥯',cat:'food',desc:'首爾排隊名店\n各種口味貝果',hours:'08:00–20:00',closed:'無',lat:37.5795,lng:126.9836,tags:['貝果','必吃']},
+    {id:'d2-04',name:'goodrunner 북촌',kr:'굿러너컴퍼니북촌',emoji:'👟',cat:'shop',desc:'北村分店\n韓國跑步文化選品',hours:'12:00–20:00',closed:'週二',lat:37.5822,lng:126.9834,tags:['跑步']},
+    {id:'d2-05',name:'LEMON SEOUL',kr:'레몬서울',emoji:'🕹️',cat:'shop',desc:'二手電器老物件\n復古感十足',hours:'13:00–20:00',closed:'週一',lat:37.5819,lng:126.9841,tags:['二手','電器']},
+    {id:'d2-06',name:'西巡邏街',kr:'서순라길',emoji:'🏯',cat:'area',desc:'昌德宮旁靜謐街道\n獨立小店聚集',hours:'全天',closed:'依店家',lat:37.5801,lng:126.9896,tags:['街區','散步']},
+    {id:'d2-07',name:'Dong-a 老文具',kr:'동아문구',emoji:'✏️',cat:'shop',desc:'老文具店\n懷舊韓國文具',hours:'10:00–19:00',closed:'週日',lat:37.5697,lng:126.9896,tags:['文具','老店']},
+    {id:'d2-08',name:'Ppau',kr:'빠우',emoji:'🍩',cat:'food',desc:'乙支路人氣甜甜圈',hours:'12:00–21:00',closed:'週一',lat:37.5669,lng:126.9921,tags:['甜點']},
+    {id:'d2-09',name:'Oldies Taco',kr:'올디스타코',emoji:'🌮',cat:'food',desc:'乙支路塔可餅\n復古美式風格',hours:'12:00–22:00',closed:'無',lat:37.5671,lng:126.9918,tags:['塔可']},
+    {id:'d2-10',name:'POHS-TIHS',kr:'포스티스',emoji:'👕',cat:'shop',desc:'乙支路個性選物',hours:'13:00–20:00',closed:'週一',lat:37.5672,lng:126.9922,tags:['選物']},
+    {id:'d2-11',name:'NOmal A 乙支路',kr:'노멀에이을지로',emoji:'📖',cat:'shop',desc:'乙支路分店\n藝術設計選書',hours:'12:00–20:00',closed:'週一',lat:37.5668,lng:126.9915,tags:['書店']},
+    {id:'d2-12',name:'山清 黑豬肉 ★',kr:'산청숯불구이',emoji:'🍖',cat:'food',highlight:true,desc:'今日晚餐！\n黑豬肉炭火燒烤',hours:'17:00–23:00',closed:'無',lat:37.5671,lng:126.9927,tags:['烤肉','必吃']},
+    {id:'d2-13',name:'Music Complex',kr:'뮤직컴플렉스서울',emoji:'🎵',cat:'shop',desc:'黑膠唱片＋音樂空間',hours:'13:00–21:00',closed:'週一',lat:37.5459,lng:127.0563,tags:['唱片']}
+  ]},
+  d3:{label:'D3_漢江日 ⭐',date:'5/10 SUN',icon:'🌟',addr:'C:\\SEOUL\\D3_漢江日',spots:[
+    {id:'d3-01',name:'廣藏市場 ★',kr:'광장시장',emoji:'🥢',cat:'food',highlight:true,desc:'首爾最古老傳統市場\n必吃：綠豆煎餅\n麻藥紫菜飯捲\n生拌牛肉',hours:'09:00–18:00',closed:'無',lat:37.5700,lng:126.9997,tags:['市場','必吃']},
+    {id:'d3-02',name:'明洞一隻雞 始祖',kr:'명동닭한마리원조',emoji:'🍗',cat:'food',highlight:true,desc:'午餐！整隻雞湯鍋\n手打刀削麵\n首爾必吃',hours:'10:00–21:00',closed:'無',lat:37.5695,lng:126.9998,tags:['雞湯','必吃']},
+    {id:'d3-03',name:'꿈동산 老玩具街',kr:'꿈동산동심쇼핑센터',emoji:'🧸',cat:'shop',desc:'滿滿懷舊玩具商場\n攝影寶地',hours:'10:00–19:00',closed:'週日',lat:37.5699,lng:127.0095,tags:['玩具','拍照']},
+    {id:'d3-04',name:'東關王廟',kr:'동관왕묘',emoji:'🏯',cat:'activity',desc:'關羽廟\n東大門附近歷史建築',hours:'09:00–18:00',closed:'週一',lat:37.5698,lng:127.0128,tags:['歷史','免費']},
+    {id:'d3-05',name:'DDP 東大門廣場',kr:'동대문디자인플라자',emoji:'🌀',cat:'activity',desc:'扎哈哈蒂設計\n流線型建築奇觀',hours:'10:00–21:00',closed:'週一',lat:37.5670,lng:127.0095,tags:['建築','設計']},
+    {id:'d3-06',name:'Elak Coffee',kr:'엘락커피',emoji:'☕',cat:'food',desc:'DDP旁步行5分鐘\n精品咖啡下午茶',hours:'10:00–22:00',closed:'無',lat:37.5651,lng:127.0089,tags:['咖啡']},
+    {id:'d3-07',name:'낭만소풍 野餐墊 ★',kr:'낭만소풍',emoji:'🧺',cat:'activity',highlight:true,desc:'돗자리피크닉 4號方案\n2人 ₩24,000 / 4小時\n서초구 신반포로 195\n記得19:00前歸還！',hours:'依季節',closed:'無',lat:37.5070,lng:126.9970,tags:['租借','野餐']},
+    {id:'d3-08',name:'서래섬 音樂會 ★',kr:'봄결찬란피크닉콘서트',emoji:'🎵',cat:'activity',highlight:true,desc:'免費！14:00–19:30\n14:00 민물결\n15:00 해밀\n16:00 김나린（吉他）\n17:00 산들（樂團）\n18:00 딸기주스\n19:00 한음（古典）',hours:'14:00–20:00',closed:'5/10限定',lat:37.5048,lng:126.9969,tags:['音樂','免費','限定']},
+    {id:'d3-09',name:'彩虹噴泉 ★',kr:'달빛무지개분수',emoji:'🌈',cat:'activity',highlight:true,desc:'20:00場次！\n世界最長橋樑噴泉\n配K-pop音樂\n壯觀必看\n（雨天/強風取消）',hours:'20:00–20:20',closed:'雨天取消',lat:37.5097,lng:126.9971,tags:['噴泉','夜景','必看']}
+  ]},
+  d4:{label:'D4_延南日',date:'5/11 MON',icon:'📁',addr:'C:\\SEOUL\\D4_延南日',spots:[
+    {id:'d4-01',name:"Randy's Donuts ★",kr:'랜디스도넛연남점',emoji:'🍩',cat:'food',highlight:true,desc:'L.A.名店首爾分店\n早午餐首選！\n各種造型甜甜圈',hours:'09:00–21:00',closed:'無',lat:37.5618,lng:126.9239,tags:['甜甜圈','必吃']},
+    {id:'d4-02',name:'平和延南 牛腸墨魚鍋',kr:'평화연남',emoji:'🍲',cat:'food',desc:'延南洞特色料理\n牛腸搭墨魚獨特組合',hours:'11:30–22:00',closed:'無',lat:37.5622,lng:126.9231,tags:['韓食','特色']},
+    {id:'d4-03',name:'광계 人參雞湯',kr:'광계',emoji:'🍗',cat:'food',desc:'人參雞湯名店\n延南洞巷弄老店',hours:'11:00–21:00',closed:'週二',lat:37.5619,lng:126.9244,tags:['人參雞湯']},
+    {id:'d4-04',name:'YOUR-MIND',kr:'유어마인드',emoji:'📚',cat:'shop',desc:'首爾著名獨立出版書店\n藝術/設計/音樂選書',hours:'13:00–20:00',closed:'週二',lat:37.5614,lng:126.9247,tags:['書店','獨立']},
+    {id:'d4-05',name:'Gimbab Records',kr:'김밥레코즈',emoji:'💿',cat:'shop',desc:'黑膠唱片專門店\n韓國indie音樂寶庫',hours:'13:00–21:00',closed:'無',lat:37.5487,lng:126.9221,tags:['唱片','黑膠']},
+    {id:'d4-06',name:'mascompany',kr:'마스컴퍼니',emoji:'🎩',cat:'shop',desc:'二手帽子專賣\n上水洞獨立小店',hours:'13:00–20:00',closed:'週一',lat:37.5491,lng:126.9218,tags:['二手','帽子']},
+    {id:'d4-07',name:'Jebi Dabang ★',kr:'제비다방',emoji:'☕',cat:'food',highlight:true,desc:'復古韓式茶房\n歷史感空間\n今日收尾咖啡',hours:'13:00–22:00',closed:'週一',lat:37.5493,lng:126.9225,tags:['咖啡','復古']}
+  ]},
+  d5:{label:'D5_望遠收尾',date:'5/12 TUE',icon:'📁',addr:'C:\\SEOUL\\D5_望遠收尾',spots:[
+    {id:'d5-01',name:'The childhood Home',kr:'더칠드후드홈',emoji:'🏠',cat:'shop',desc:'充滿童年記憶的酷ㄌ選物店',hours:'12:00–20:00',closed:'週一',lat:37.5543,lng:126.9058,tags:['選物']},
+    {id:'d5-02',name:'Small Nest',kr:'스몰네스트',emoji:'🪴',cat:'shop',desc:'望遠洞生活選物店',hours:'12:00–20:00',closed:'週一',lat:37.5551,lng:126.9071,tags:['選物']},
+    {id:'d5-03',name:'勣勣糖餅',kr:'망원호떡',emoji:'🍡',cat:'food',desc:'望遠市場名物！\n外脆內軟韓式糖餅',hours:'10:00–18:00',closed:'依攤位',lat:37.5548,lng:126.9066,tags:['街食','市場']},
+    {id:'d5-04',name:'Uirak Mangwon',kr:'의락망원본점',emoji:'🍜',cat:'food',desc:'望遠洞人氣餐廳',hours:'11:30–21:00',closed:'週一',lat:37.5545,lng:126.9063,tags:['韓食']},
+    {id:'d5-05',name:'merry more',kr:'메리모어',emoji:'🎀',cat:'shop',desc:'望遠洞可愛雜貨選物',hours:'12:00–20:00',closed:'週一',lat:37.5547,lng:126.9060,tags:['雜貨']},
+    {id:'d5-06',name:'✈ 19:00 出發機場',kr:'인천국제공항',emoji:'✈️',cat:'transport',highlight:true,desc:'19:00 從弘大出發\nAREX → 仁川機場\n23:00 TR873 起飛！\n\n回台灣囉～孤芳小隊辛苦了！',hours:'19:00出發',closed:'',lat:37.4602,lng:126.4407,tags:['機場','回家']}
+  ]}
+};
+
+const EVENTS = [
+  {
+    icon:'🌏',
+    title:'Seoul Friendship Festival 2026',
+    subtitle:'首爾世界城市文化慶典 — 30週年',
+    date:'5/9（六）–5/10（日）',
+    time:'12:00–21:00',
+    location:'東大門設計廣場 DDP',
+    lat:37.5670,lng:127.0095,
+    tags:['免費','國際','DDP','D2D3'],
+    desc:'73個國家大使館＋文化院同台！\n\n▶ 世界文化表演舞台\n▶ 各國大使館展示Zone\n▶ 30+國家美食＋甜點攤\n▶ 10國傳統服裝體驗\n▶ 世界電影放映（每晚19:00）\n  5/9《法國動畫·雞肉給琳達》\n  5/10《匈牙利·舞蹈30色》\n▶ K-文化Zone\n\n📸 DDP本身未來感建築超好拍\n去年16萬人次！今年73國史上最大規模'
+  },
+  {
+    icon:'🌉',
+    title:'차없는잠수교 無車潛水橋市集',
+    subtitle:'뚜벅뚜벅축제 — 每週日封橋',
+    date:'5/10（日）※你在首爾期間',
+    time:'14:00–20:00',
+    location:'潛水橋（盤浦漢江公園下方）',
+    lat:37.5070,lng:126.9970,
+    tags:['免費','漢江','D3','每週日'],
+    desc:'封橋！在橋上野餐散步 — 非常韓國年輕人的感覺。\n\n▶ 月光野餐休憩站（免費帳篷區）\n▶ 小型創作者市集\n▶ Food Truck\n▶ 漢江夕陽視角\n▶ 跑步的人＋情侶＋野餐\n\n📸 超適合街拍：\n  · 韓國情侶漢江野餐\n  · 跑步的人\n  · 首爾春天晚上光線\n  · 潛水橋視角的漢江\n\n⚡ D3行程：서래섬音樂會→潛水橋市集→彩虹噴泉，三連爆！'
+  },
+  {
+    icon:'🌿',
+    title:'首爾國際庭園博覽會',
+    subtitle:'Seoul International Garden Show 2026',
+    date:'5/1–10/27（整個旅遊期間）',
+    time:'12:00–19:00',
+    location:'서울숲（首爾林）· 聖水洞一帶',
+    lat:37.5444,lng:127.0374,
+    tags:['免費','聖水','D1','全程開放'],
+    desc:'史上最大規模！9萬㎡，167個花園。\n\n▶ 서울숲主會場＋成水洞延伸\n▶ 무신사 × 클리오 品牌特化空間\n▶ 農心 신라면40週年主題花園\n▶ AR寶物獵人遊戲「가든헌터스」\n▶ QR掃碼9國語言語音導覽\n▶ 每週末戶外音樂表演\n▶ 復古耳機音樂體驗（僅外國人）\n\n📸 超適合：\n  · 韓國春天＋植物\n  · 情侶感柔和街景\n  · 品牌裝置藝術\n\n✨ D1去聖水當天就可以順路去！'
+  }
+];
+
+const PHRASES = [
+  {zh:'你好',kr:'안녕하세요',roman:'annyeong-haseyo'},
+  {zh:'謝謝',kr:'감사합니다',roman:'gamsahamnida'},
+  {zh:'多少錢？',kr:'얼마예요?',roman:'eolmayeyo?'},
+  {zh:'給我這個',kr:'이거 주세요',roman:'igeo juseyo'},
+  {zh:'好好吃！',kr:'맛있어요!',roman:'masisseoyo!'},
+  {zh:'廁所在哪？',kr:'화장실 어디예요?',roman:'hwajangsil eodiyeyo?'},
+  {zh:'結帳',kr:'계산해 주세요',roman:'gyesan hae juseyo'},
+  {zh:'可以拍照嗎？',kr:'사진 찍어도 돼요?',roman:'sajin jjigeodo dwaeyo?'},
+  {zh:'好可愛！',kr:'너무 귀여워요!',roman:'neomu gwiyeowoyo!'},
+  {zh:'不用袋子',kr:'봉투 필요 없어요',roman:'bongtu piryo eopseoyo'},
+  {zh:'說慢一點',kr:'천천히 말해 주세요',roman:'cheoncheonhi malhae juseyo'},
+  {zh:'咖哩哪好吃？',kr:'카레 맛집 어디예요?',roman:'kare matjip eodiyeyo?'},
+  {zh:'可以看菜單？',kr:'메뉴판 주세요',roman:'menyupan juseyo'},
+  {zh:'不要辣',kr:'맵지 않게 해주세요',roman:'maepji ange haejuseyo'},
+  {zh:'外帶/打包',kr:'포장해 주세요',roman:'pojang hae juseyo'}
+];
+
+// ════════════════════════════════
+// STATE
+// ════════════════════════════════
+let checked = JSON.parse(localStorage.getItem('seoul_checked')||'{}');
+let currentDay = null;
+
+// ════════════════════════════════
+// CLOCK
+// ════════════════════════════════
+function updateClock(){
+  const now = new Date();
+  const kst = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
+  const h = String(kst.getHours()).padStart(2,'0');
+  const m = String(kst.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent = h+':'+m+' KST';
+}
+updateClock();
+setInterval(updateClock,10000);
+
+// ════════════════════════════════
+// WEATHER
+// ════════════════════════════════
+async function fetchWeather(){
+  try{
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current=temperature_2m,weathercode,apparent_temperature,windspeed_10m&hourly=temperature_2m,precipitation_probability&forecast_days=1&timezone=Asia%2FSeoul');
+    const d = await r.json();
+    const c = d.current;
+
+    const t = Math.round(c.temperature_2m);
+    const f = Math.round(c.apparent_temperature);
+    const w = Math.round(c.windspeed_10m);
+    const icon = weatherIcon(c.weathercode);
+    const desc = weatherDesc(c.weathercode);
+
+    let rain = '--';
+
+    if(d.hourly && d.hourly.time && d.hourly.precipitation_probability){
+      const now = new Date();
+      const kst = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
+      const yyyy = kst.getFullYear();
+      const mm = String(kst.getMonth()+1).padStart(2,'0');
+      const dd = String(kst.getDate()).padStart(2,'0');
+      const hh = String(kst.getHours()).padStart(2,'0');
+      const currentHour = `${yyyy}-${mm}-${dd}T${hh}:00`;
+      let idx = d.hourly.time.indexOf(currentHour);
+
+      if(idx < 0){
+        idx = d.hourly.time.findIndex(time => time > currentHour);
+      }
+
+      if(idx >= 0){
+        rain = d.hourly.precipitation_probability[idx];
+      }
+    }
+
+    document.getElementById('weather-mini').textContent = `${icon} ${t}°C｜雨 ${rain}%`;
+
+    document.getElementById('weather-detail').innerHTML =
+      `<b>首爾 Seoul</b><br>
+      氣溫：${t}°C<br>
+      體感：${f}°C<br>
+      降雨機率：${rain}%<br>
+      天氣：${desc}<br>
+      風速：${w} km/h<br>
+      <span style="font-size:9px;color:#808080">Open-Meteo 即時資料</span>`;
+  }catch(e){
+    document.getElementById('weather-mini').textContent='🌤 首爾';
+  }
+}
+function weatherIcon(c){
+  if(c===0)return'☀️';if(c<=2)return'⛅';if(c===3)return'☁️';
+  if(c<=49)return'🌫️';if(c<=67)return'🌧️';if(c<=77)return'❄️';
+  if(c<=82)return'🌦️';return'⛈️';
+}
+function weatherDesc(c){
+  if(c===0)return'晴天';if(c<=2)return'多雲';if(c===3)return'陰天';
+  if(c<=49)return'霧';if(c<=67)return'下雨';if(c<=77)return'下雪';
+  if(c<=82)return'陣雨';return'雷雨';
+}
+function toggleWeather(){
+  const p = document.getElementById('weather-popup');
+  p.classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#weather-popup')&&!e.target.closest('#weather-mini')){
+    document.getElementById('weather-popup').classList.remove('open');
+  }
+});
+fetchWeather();
+
+// ════════════════════════════════
+// OPEN STATUS
+// ════════════════════════════════
+function getStatus(spot){
+  if(!spot.hours||spot.hours==='全天'||spot.cat==='area'||spot.cat==='transport')return{cls:'',label:spot.hours||''};
+  const now = new Date();
+  const kst = new Date(now.toLocaleString('en-US',{timeZone:'Asia/Seoul'}));
+  const cur = kst.getHours()*60+kst.getMinutes();
+  const m = spot.hours.match(/(\d+):(\d+)[–-](\d+):(\d+)/);
+  if(!m)return{cls:'',label:spot.hours};
+  const open = parseInt(m[1])*60+parseInt(m[2]);
+  const close = parseInt(m[3])*60+parseInt(m[4]);
+  if(cur>=open&&cur<close)return{cls:'status-open',label:'● 營業中'};
+  return{cls:'status-closed',label:'● 已關閉'};
+}
+
+// ════════════════════════════════
+// WINDOW MANAGEMENT
+// ════════════════════════════════
+function openWindow(id){
+  document.querySelectorAll('.win').forEach(w=>w.classList.remove('open'));
+  document.getElementById(id).classList.add('open');
+  updateTaskbar(id);
+}
+function closeWindow(id){
+  document.getElementById(id).classList.remove('open');
+  updateTaskbar(null);
+}
+function closeAllWindows(){
+  document.querySelectorAll('.win').forEach(w=>w.classList.remove('open'));
+  updateTaskbar(null);
+}
+function updateTaskbar(activeId){
+  const items = document.getElementById('taskbar-items');
+  items.innerHTML = '';
+  document.querySelectorAll('.win.open').forEach(w=>{
+    const titleEl = w.querySelector('.win-title-left span:last-child');
+    const label = titleEl ? titleEl.textContent.substring(0,12) : w.id;
+    const btn = document.createElement('button');
+    btn.className = 'taskbar-item'+(w.id===activeId?' active':'');
+    btn.textContent = label;
+    btn.onclick = ()=>openWindow(w.id);
+    items.appendChild(btn);
+  });
+}
+
+// ════════════════════════════════
+// FOLDER (DAY VIEW)
+// ════════════════════════════════
+function openFolder(dayId){
+  currentDay = dayId;
+  const day = DAYS[dayId];
+  document.getElementById('folder-win-title').textContent = day.label;
+  document.getElementById('folder-win-icon').textContent = day.icon;
+  document.getElementById('folder-addr').value = day.addr;
+  document.getElementById('folder-day-info').textContent = day.date;
+  renderFolderGrid(day);
+  openWindow('folder-win');
+}
+
+function renderFolderGrid(day){
+  const grid = document.getElementById('folder-grid');
+  const checkedCount = day.spots.filter(s=>checked[s.id]).length;
+  const pct = day.spots.length>0?(checkedCount/day.spots.length*100):0;
+  document.getElementById('folder-progress-fill').style.width=pct+'%';
+  document.getElementById('folder-progress-text').textContent=checkedCount+' / '+day.spots.length;
+  document.getElementById('folder-status').textContent=day.spots.length+' 個項目';
+
+  grid.innerHTML = day.spots.map(s=>`
+    <div class="folder-icon ${checked[s.id]?'checked':''}" id="fi-${s.id}" onclick="openSpot('${s.id}')">
+      <div class="ficon">${s.emoji}</div>
+      <div class="fname">${s.name}</div>
+      <div class="ftype">.txt</div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════
+// NOTEPAD (SPOT DETAIL)
+// ════════════════════════════════
+function openSpot(spotId){
+  let spot=null, dayId=null;
+  for(const [did,day] of Object.entries(DAYS)){
+    const s = day.spots.find(x=>x.id===spotId);
+    if(s){spot=s;dayId=did;break;}
+  }
+  if(!spot)return;
+
+  const status = getStatus(spot);
+  const isChecked = !!checked[spotId];
+
+  document.getElementById('notepad-win-title').textContent = spot.name+'.txt — 記事本';
+  document.getElementById('notepad-status').textContent = isChecked?'✓ 已打卡':'未打卡';
+
+  const content = `${spot.emoji} ${spot.name}
+${spot.kr}
+${'─'.repeat(30)}
+📂 分類：${spot.cat}
+⏰ 營業：${spot.hours}
+🚫 公休：${spot.closed||'無'}
+${status.label?`📊 狀態：${status.label}`:''}
+
+📝 說明：
+${spot.desc}
+
+🏷️ 標籤：${spot.tags.join(' · ')}
+${'─'.repeat(30)}
+${isChecked?'✅ 已打卡完成！':'⬜ 尚未打卡'}
+`;
+
+  document.getElementById('notepad-content').innerHTML =
+    content.replace(/\n/g,'<br>') +
+    `<div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;">
+      <button onclick="toggleCheck('${spotId}')" style="background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:4px 10px;font-size:12px;font-weight:bold;cursor:pointer;">${isChecked?'取消打卡 ✕':'✓ 打卡'}</button>
+      ${spot.lat?`<button onclick="openMapDialog('${spotId}')" style="background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:4px 10px;font-size:12px;cursor:pointer;">📍 地圖</button>`:''}
+      <button onclick="closeWindow('notepad-win')" style="background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:4px 10px;font-size:12px;cursor:pointer;">關閉</button>
+    </div>`;
+
+  openWindow('notepad-win');
+}
+
+// ════════════════════════════════
+// CHECK / UNCHECK
+// ════════════════════════════════
+function toggleCheck(spotId){
+  checked[spotId] = !checked[spotId];
+  if(!checked[spotId])delete checked[spotId];
+  localStorage.setItem('seoul_checked',JSON.stringify(checked));
+
+  // re-render notepad
+  openSpot(spotId);
+
+  // update folder icon if visible
+  const fi = document.getElementById('fi-'+spotId);
+  if(fi) fi.classList.toggle('checked',!!checked[spotId]);
+
+  // update folder progress
+  if(currentDay) renderFolderGrid(DAYS[currentDay]);
+}
+
+// ════════════════════════════════
+// MAP DIALOG
+// ════════════════════════════════
+function openMapDialog(spotId){
+  let spot=null;
+  for(const day of Object.values(DAYS)){
+    const s=day.spots.find(x=>x.id===spotId);
+    if(s){spot=s;break;}
+  }
+  if(!spot)return;
+  document.getElementById('map-spot-name').textContent=spot.emoji+' '+spot.name;
+  document.getElementById('map-spot-kr').textContent=spot.kr;
+  document.getElementById('btn-google').onclick=()=>{
+    window.open(`https://www.google.com/maps?q=${spot.lat},${spot.lng}`,'_blank');
+    closeMapDialog();
+  };
+  document.getElementById('btn-kakao').onclick=()=>{
+    window.open(`https://map.kakao.com/link/map/${encodeURIComponent(spot.kr)},${spot.lat},${spot.lng}`,'_blank');
+    closeMapDialog();
+  };
+  document.getElementById('map-dialog').classList.add('open');
+}
+function openEventMap(lat,lng,name){
+  document.getElementById('map-spot-name').textContent=name;
+  document.getElementById('map-spot-kr').textContent='';
+  document.getElementById('btn-google').onclick=()=>{window.open(`https://www.google.com/maps?q=${lat},${lng}`,'_blank');closeMapDialog();};
+  document.getElementById('btn-kakao').onclick=()=>{window.open(`https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}`,'_blank');closeMapDialog();};
+  document.getElementById('map-dialog').classList.add('open');
+}
+function closeMapDialog(){document.getElementById('map-dialog').classList.remove('open');}
+
+// ════════════════════════════════
+// EVENTS RENDER
+// ════════════════════════════════
+function renderEvents(){
+  document.getElementById('events-content').innerHTML = EVENTS.map(e=>`
+    <div class="event-item">
+      <div class="event-header">${e.icon} ${e.title}</div>
+      <div class="event-body">
+        <b>${e.subtitle}</b><br>
+        📅 ${e.date}<br>
+        🕐 ${e.time}<br>
+        📍 ${e.location}<br>
+        <div style="margin:4px 0;">${e.tags.map(t=>`<span class="event-tag">${t}</span>`).join('')}</div>
+        <div style="margin-top:6px;font-family:'Courier New',monospace;font-size:11px;white-space:pre-wrap;line-height:1.7;border-top:1px solid #808080;padding-top:6px;">${e.desc}</div>
+        <button class="event-map-btn" onclick="openEventMap(${e.lat},${e.lng},'${e.title}')">📍 在地圖中開啟</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ════════════════════════════════
+// PHRASES RENDER
+// ════════════════════════════════
+function renderPhrases(){
+  document.getElementById('phrase-grid').innerHTML = PHRASES.map((p,i)=>`
+    <div class="phrase-card" id="pc-${i}" onclick="flipPhrase(${i})">
+      <div class="phrase-front-zh">${p.zh}</div>
+      <div class="phrase-front-hint">點擊看韓文</div>
+    </div>
+  `).join('');
+}
+function flipPhrase(i){
+  const card = document.getElementById('pc-'+i);
+  const p = PHRASES[i];
+
+  if(card.classList.contains('flipped')){
+    card.classList.remove('flipped');
+    card.innerHTML=`<div class="phrase-front-zh">${p.zh}</div><div class="phrase-front-hint">點擊看韓文</div>`;
+  }else{
+    card.classList.add('flipped');
+    card.innerHTML=`
+      <div class="phrase-back-kr">${p.kr}</div>
+      <div class="phrase-back-roman">${p.roman}</div>
+      <div style="font-size:18px;margin-top:4px;">🔊</div>
+    `;
+
+    speakKorean(p.kr);
+  }
+}
+
+// ════════════════════════════════
+// TRANSPORT RENDER
+// ════════════════════════════════
+function renderTransport(){
+  const metros=[
+    {color:'#3DB745',line:'2號線',spots:'弘大入口 · 聖水 · DDP'},
+    {color:'#EF7C1C',line:'3號線',spots:'安國（北村）· 景福宮'},
+    {color:'#9B4BA1',line:'5號線',spots:'廣藏市場（鍾路3街）'},
+    {color:'#7B6A45',line:'7號線',spots:'뚝섬유원지（漢江）'},
+    {color:'#C2A132',line:'9號線',spots:'신반포（盤浦漢江）'}
+  ];
+  document.getElementById('transport-content').innerHTML=`
+    <div class="transport-box">
+      <div class="transport-box-title">✈ 去程 — BR170（長榮航空）</div>
+      <div class="transport-box-body">
+        桃園(TPE) <b>07:05</b> → 仁川(ICN) <b>10:30</b><br>
+        AREX機場快線 → 弘大入口站 約43分鐘<br>
+        <span class="transport-highlight">另購AREX單程票 ₩9,500</span>
+      </div>
+    </div>
+    <div class="transport-box">
+      <div class="transport-box-title">✈ 回程 — TR873（酷航）</div>
+      <div class="transport-box-body">
+        仁川(ICN) <b>23:00</b> 出發<br>
+        <span class="transport-highlight">19:00 弘大出發 → AREX</span><br>
+        氣候同行卡可搭AREX回程 ✓
+      </div>
+    </div>
+    <div class="transport-box">
+      <div class="transport-box-title">🚇 交通卡 — 氣候同行卡 5日券</div>
+      <div class="transport-box-body">
+        卡費 ₩3,000 + 5日 ₩20,000 = <span class="transport-highlight">₩23,000</span><br>
+        地鐵＋公車無限搭乘！<br>
+        弘大入口站抵達後購買<br><br>
+        ⚠️ <b style="color:#800000">不能從仁川機場上車！</b><br>
+        去程另購AREX票，回程可搭 ✓
+      </div>
+    </div>
+    <div class="transport-box">
+      <div class="transport-box-title">🗺 常用地鐵站</div>
+      <div class="transport-box-body">
+        ${metros.map(m=>`
+          <div class="metro-line">
+            <div class="metro-dot" style="background:${m.color};"></div>
+            <b>${m.line}</b> ${m.spots}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ════════════════════════════════
+// PROGRESS RENDER
+// ════════════════════════════════
+function renderProgress(){
+  const total = Object.values(DAYS).reduce((a,d)=>a+d.spots.length,0);
+  const done = Object.keys(checked).length;
+  const pct = total>0?Math.round(done/total*100):0;
+
+  let html=`<b>📊 整體打卡進度</b><br>
+    <div class="progress-bar-wrap" style="margin:4px 0 10px;">
+      <div class="progress-bar-fill" style="width:${pct}%"></div>
+      <div class="progress-text">${done} / ${total} (${pct}%)</div>
+    </div>`;
+
+  for(const [id,day] of Object.entries(DAYS)){
+    const d = day.spots.filter(s=>checked[s.id]).length;
+    const p = day.spots.length>0?Math.round(d/day.spots.length*100):0;
+    html+=`<div style="margin-bottom:8px;">
+      <div style="font-size:11px;margin-bottom:2px;">${day.icon} ${day.label} (${day.date})</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${p}%"></div>
+        <div class="progress-text">${d} / ${day.spots.length}</div>
+      </div>
+    </div>`;
+  }
+
+  html+=`<div style="margin-top:10px;font-size:10px;color:#808080;border-top:1px solid #808080;padding-top:6px;">
+    打卡資料存在瀏覽器中，關閉不會消失<br>
+    <button onclick="if(confirm('確定清除所有打卡記錄？')){localStorage.removeItem('seoul_checked');checked={};renderProgress();}" style="margin-top:4px;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;padding:2px 8px;font-size:10px;cursor:pointer;">清除所有打卡</button>
+  </div>`;
+
+  document.getElementById('progress-content').innerHTML=html;
+}
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+renderEvents();
+renderPhrases();
+renderTransport();
+
+// render progress when opened
+document.querySelector('[onclick="openWindow(\'progress-win\')"]').addEventListener('click',()=>{
+  setTimeout(renderProgress,50);
+});
+
+// ════════════════════════════════
+// TRAVEL MAP
+// ════════════════════════════════
+let travelMap = null;
+let mapMarkers = [];
+
+function openTravelMap(){
+  openWindow('map-win');
+
+  setTimeout(() => {
+    if(!travelMap){
+      travelMap = L.map('travel-map').setView([37.5665,126.9780], 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:'© OpenStreetMap'
+      }).addTo(travelMap);
+    }
+
+    travelMap.invalidateSize();
+    showMapDay('all');
+  }, 200);
+}
+
+function showMapDay(dayId){
+  if(!travelMap) return;
+
+  mapMarkers.forEach(marker => {
+    travelMap.removeLayer(marker);
+  });
+
+  mapMarkers = [];
+
+  Object.entries(DAYS).forEach(([id, day]) => {
+
+    if(dayId !== 'all' && id !== dayId) return;
+
+    day.spots.forEach(spot => {
+
+      if(!spot.lat || !spot.lng) return;
+
+      const marker = L.marker([spot.lat, spot.lng]).addTo(travelMap);
+
+      marker.bindPopup(`
+        <div style="font-family:sans-serif;font-size:12px;line-height:1.6;">
+          <b>${spot.emoji} ${spot.name}</b><br>
+          ${spot.kr}<br>
+          ${day.label}<br>
+          ⏰ ${spot.hours}
+        </div>
+      `);
+
+      mapMarkers.push(marker);
+    });
+  });
+
+  if(mapMarkers.length > 0){
+    const group = L.featureGroup(mapMarkers);
+    travelMap.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
+
+// ════════════════════════════════
+// KOREAN SPEECH
+// ════════════════════════════════
+function speakKorean(text){
+  if(!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ko-KR';
+  utter.rate = 0.9;
+  utter.pitch = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const koVoice = voices.find(v => v.lang.includes('ko'));
+  if(koVoice) utter.voice = koVoice;
+
+  window.speechSynthesis.speak(utter);
+}
+
+
+// ════════════════════════════════
+// METRO MAP
+// ════════════════════════════════
+const METRO_LINES = [
+  {
+    id:'line2',
+    name:'2號線｜綠線',
+    color:'#00A84D',
+    days:['d1','d2','d3','d4','d5'],
+    stations:['弘大入口','合井','新堂','東大門歷史文化公園','聖水','建大入口']
+  },
+  {
+    id:'line3',
+    name:'3號線｜橘線',
+    color:'#EF7C1C',
+    days:['d2'],
+    stations:['景福宮','安國','鍾路3街','乙支路3街','忠武路']
+  },
+  {
+    id:'line4',
+    name:'4號線｜藍線',
+    color:'#00A5DE',
+    days:['d3'],
+    stations:['惠化','東大門','東大門歷史文化公園','明洞','首爾站']
+  },
+  {
+    id:'line5',
+    name:'5號線｜紫線',
+    color:'#996CAC',
+    days:['d2','d3'],
+    stations:['弘大入口','光化門','鍾路3街','乙支路4街','東大門歷史文化公園']
+  },
+  {
+    id:'line6',
+    name:'6號線｜咖啡線',
+    color:'#CD7C2F',
+    days:['d4','d5'],
+    stations:['上水','合井','望遠','梨泰院','藥水']
+  },
+  {
+    id:'line7',
+    name:'7號線｜橄欖綠線',
+    color:'#747F00',
+    days:['d3'],
+    stations:['建大入口','뚝섬유원지','高速巴士客運站']
+  },
+  {
+    id:'line9',
+    name:'9號線｜金線',
+    color:'#BDB092',
+    days:['d3'],
+    stations:['高速巴士客運站','新盤浦','舊盤浦','銅雀']
+  },
+  {
+    id:'arex',
+    name:'AREX｜機場快線',
+    color:'#0090D2',
+    days:['d1','d5'],
+    stations:['仁川機場T1','金浦機場','弘大入口','孔德','首爾站']
+  },
+  {
+    id:'gyeongui',
+    name:'京義中央線｜薄綠線',
+    color:'#77C4A3',
+    days:['d4','d5'],
+    stations:['弘大入口','加佐','數碼媒體城']
+  }
+];
+
+function renderMetroSvg(filterDay){
+  const lines = METRO_LINES.filter(line => filterDay === 'all' || line.days.includes(filterDay));
+  const height = Math.max(220, lines.length * 54 + 40);
+  const width = 760;
+  let svg = `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Seoul subway simplified map">
+    <rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff"/>
+    <text x="20" y="24" font-size="16" font-family="MS Sans Serif, Arial" font-weight="bold">SEOUL SUBWAY QUICK MAP</text>
+  `;
+
+  lines.forEach((line, idx) => {
+    const y = 58 + idx * 54;
+    const x1 = 110;
+    const x2 = 700;
+    svg += `
+      <text x="18" y="${y+5}" font-size="12" font-family="MS Sans Serif, Arial" font-weight="bold">${line.name}</text>
+      <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${line.color}" stroke-width="8" stroke-linecap="round"/>
+    `;
+
+    const count = line.stations.length;
+    line.stations.forEach((station, sidx) => {
+      const x = x1 + (x2 - x1) * (sidx / Math.max(1, count - 1));
+      svg += `
+        <circle cx="${x}" cy="${y}" r="7" fill="#fff" stroke="#000" stroke-width="2"/>
+        <text x="${x}" y="${y+22}" font-size="10" font-family="MS Sans Serif, Arial" text-anchor="middle">${station}</text>
+      `;
+    });
+  });
+
+  svg += `</svg>`;
+  document.getElementById('metro-svg-box').innerHTML = svg;
+}
+
+function renderMetroMap(filterDay='all', btn=null){
+  document.querySelectorAll('.metro-filter-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  renderMetroSvg(filterDay);
+
+  const lines = METRO_LINES.filter(line => filterDay === 'all' || line.days.includes(filterDay));
+
+  document.getElementById('metro-map-list').innerHTML = lines.map(line => `
+    <div class="metro-line-card">
+      <div class="metro-line-title">
+        <span class="metro-line-color" style="background:${line.color}"></span>
+        ${line.name}
+      </div>
+      <div class="metro-station-row">
+        ${line.stations.map((station, index) => `
+          <span class="metro-station">${station}</span>
+          ${index < line.stations.length - 1 ? '<span class="metro-arrow">→</span>' : ''}
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderMetroMap('all');
+});
+
+
+// ════════════════════════════════
+// TRAVEL INFO MODULES
+// ════════════════════════════════
+const TRAVEL_INFO = {
+  immigration:{
+    icon:'🛂',
+    title:'通關流程.exe',
+    status:'KOREA ARRIVAL PROCESS',
+    content:`🇰🇷 韓國入境 / 通關資料填寫流程
+
+STEP 1｜出發前先準備
+────────────────────────
+□ 護照
+□ 回程機票
+□ 韓國住宿地址
+□ 第一晚住宿電話
+□ 航班號碼
+□ 旅遊天數與目的
+
+常用英文：
+Purpose of visit：Travel / Tourism
+Address in Korea：填住宿地址
+Length of stay：5 days
+
+STEP 2｜電子入境申報 / 入境卡
+────────────────────────
+韓國近年逐步推行電子入境卡與線上申報。
+通常可以在出發前線上填寫，或抵達機場後依現場指示填寫。
+
+會需要：
+- 護照資料
+- 航班號碼
+- 韓國住宿地址
+- 聯絡方式
+- 入境目的
+
+STEP 3｜抵達仁川機場
+────────────────────────
+跟著：
+ARRIVAL / 입국
+指示前往入境審查。
+
+STEP 4｜外國人入境審查
+────────────────────────
+準備護照。
+可能會被問：
+
+Q：How long will you stay?
+A：Five days.
+
+Q：What is the purpose of your visit?
+A：Travel.
+
+Q：Where will you stay?
+A：I’m staying in Hongdae.
+
+STEP 5｜領行李
+────────────────────────
+看航班號碼找到行李轉盤。
+
+STEP 6｜海關申報
+────────────────────────
+沒有需要申報的東西：
+走 Nothing to Declare / 綠色通道。
+
+STEP 7｜出機場後
+────────────────────────
+建議順序：
+1. 買 / 領 WOWPASS 或 T-money
+2. 買 AREX 車票
+3. 搭 AREX 到弘大入口
+4. 到住宿放行李
+
+小提醒：
+- 住宿地址建議先存在手機截圖
+- 網路還沒連上時也能給海關看
+- 入境審查通常不用講太多，簡單回答即可`
+  },
+
+  delivery:{
+    icon:'🍗',
+    title:'韓國外送.exe',
+    status:'FOOD DELIVERY GUIDE',
+    content:`🍗 外國人在韓國如何叫外送？
+
+最推薦：Shuttle Delivery
+────────────────────────
+對外國旅客最友善。
+
+優點：
+✅ 有英文介面
+✅ 可用外國信用卡
+✅ 不一定需要韓國手機號碼
+✅ 弘大、梨泰院、聖水等區域常可使用
+
+使用流程：
+1. 打開 Shuttle Delivery
+2. 輸入住宿地址
+3. 選餐廳
+4. 刷卡付款
+5. 等外送送達
+
+常點類型：
+- 炸雞
+- 漢堡
+- 咖哩
+- 墨西哥料理
+- 韓式便當
+- 咖啡甜點
+
+韓文備註可用：
+문 앞에 놓아 주세요
+請放在門口。
+
+배달 도착하면 연락 주세요
+送到時請聯絡我。
+
+其他平台
+────────────────────────
+Coupang Eats：
+部分情況外國人可用，但通常需要韓國電話或帳號條件。
+
+Baemin / 배달의민족：
+韓國人最常用，但對外國旅客比較不友善。
+通常需要韓國手機認證，韓文介面也比較多。
+
+外送文化小提醒
+────────────────────────
+- 韓國通常不用給小費
+- 很多外送會放在門口
+- 有些大樓需要門禁密碼
+- 住宿是飯店的話，可能只能送到大廳
+- 深夜炸雞、宵夜選擇很多
+
+建議寫給外送員：
+저는 외국인이라 한국어를 잘 못해요.
+문 앞에 놓아 주세요.
+我是外國人，韓文不太好，請放門口。`
+  },
+
+  bike:{
+    icon:'🚲',
+    title:'租腳踏車.exe',
+    status:'SEOUL BIKE GUIDE',
+    content:`🚲 外國人在首爾如何租腳踏車？
+
+首爾共享腳踏車：따릉이 / Seoul Bike
+────────────────────────
+可以想像成韓國版 YouBike。
+漢江、首爾林、汝矣島一帶都很適合騎。
+
+外國人可以用嗎？
+────────────────────────
+✅ 可以。
+
+通常需要：
+- 信用卡
+- Seoul Bike App
+- 可上網的手機
+- 部分情況可能需要電話驗證
+
+最推薦旅客：
+1 Day Pass / 一日券
+
+使用流程
+────────────────────────
+STEP 1
+下載 Seoul Bike App
+
+STEP 2
+選擇外國人 / Foreigner
+
+STEP 3
+選擇 1 Day Pass
+
+STEP 4
+刷卡付款
+
+STEP 5
+到腳踏車站點掃 QR Code
+
+STEP 6
+解鎖後開始騎乘
+
+推薦騎乘地點
+────────────────────────
+🌉 盤浦漢江公園
+適合搭配彩虹噴泉、潛水橋市集。
+
+🌿 首爾林 / 서울숲
+適合聖水行程順路。
+
+🏙 汝矣島漢江公園
+視野開闊，適合看夕陽。
+
+注意事項
+────────────────────────
+- 漢江風很大
+- 春天晚上可能偏冷
+- 韓國部分路段坡度明顯
+- 騎車請靠右
+- 晚上一定要注意燈光
+- 還車要確認 App 顯示已完成
+
+實用韓文：
+자전거 대여소가 어디예요?
+腳踏車租借站在哪裡？
+
+반납했어요.
+我已經還車了。`
+  },
+
+  cards:{
+    icon:'💳',
+    title:'交通卡大全.exe',
+    status:'WOWPASS / T-MONEY / CLIMATE CARD',
+    content:`💳 韓國交通卡使用方式
+
+推薦組合
+────────────────────────
+如果你是觀光客：
+
+WOWPASS + 氣候同行卡
+很適合。
+
+WOWPASS 負責：
+- 消費
+- 換匯
+- 備用交通卡
+
+氣候同行卡負責：
+- 首爾市區地鐵 / 公車無限搭
+
+────────────────────────
+1｜WOWPASS
+────────────────────────
+什麼是 WOWPASS？
+
+像是：
+外國旅客專用的韓國預付卡。
+
+功能：
+✅ VISA 消費
+✅ 韓幣儲值
+✅ 換匯
+✅ 可當 T-money 交通卡使用
+
+購買方式：
+1. 找 WOWPASS 機台
+2. 掃描護照
+3. 放入現金
+4. 製作卡片
+5. 下載 App 綁定
+
+常見地點：
+- 仁川機場
+- 弘大
+- 明洞
+- 東大門
+- 主要飯店 / 車站附近
+
+重要注意：
+WOWPASS 有兩個餘額：
+
+A. 消費餘額
+B. T-money 交通餘額
+
+交通餘額要另外儲值，
+不是卡片有錢就一定能搭車。
+
+────────────────────────
+2｜T-money
+────────────────────────
+韓國最基本交通卡。
+
+可用：
+✅ 地鐵
+✅ 公車
+✅ 部分計程車
+✅ 超商小額消費
+
+購買地點：
+- CU
+- GS25
+- 7-Eleven
+- 地鐵站
+
+價格：
+卡片通常 ₩3,000～₩5,000
+不含儲值金。
+
+如何儲值：
+1. 到地鐵站加值機
+2. 選中文 / English
+3. 放上 T-money
+4. 放入現金
+5. 完成儲值
+
+注意：
+地鐵站加值機很多只能用現金。
+
+────────────────────────
+3｜氣候同行卡 / Climate Card
+────────────────────────
+首爾市區無限搭交通卡。
+
+適合：
+每天會一直搭地鐵 / 公車的人。
+
+可搭：
+✅ 首爾地鐵
+✅ 首爾市區公車
+✅ 部分區域交通
+
+不一定包含：
+❌ AREX 直達車
+❌ 機場巴士
+❌ 部分非首爾區域路線
+❌ 部分新盆唐線等特殊路線
+
+購買方式：
+- 地鐵站服務台
+- 部分便利商店
+
+使用流程：
+1. 購買實體卡
+2. 到加值機選擇天數方案
+3. 付款開通
+4. 進站感應使用
+
+旅遊建議：
+如果你 5/8–5/12 都在首爾市區移動，
+可以考慮 5 日方案。
+
+你的行程中常用：
+- 弘大入口
+- 聖水
+- 安國
+- 鍾路3街
+- 東大門
+- 盤浦漢江
+- 望遠
+
+────────────────────────
+簡單選擇法
+────────────────────────
+只想簡單：
+T-money
+
+想少換錢、可刷卡：
+WOWPASS
+
+每天搭很多地鐵：
+氣候同行卡
+
+最舒服組合：
+WOWPASS + 氣候同行卡`
+  }
+};
+
+function openTravelInfo(type){
+  const data = TRAVEL_INFO[type];
+  if(!data) return;
+
+  document.getElementById('travel-info-icon').textContent = data.icon;
+  document.getElementById('travel-info-window-title').textContent = data.title + ' — 記事本';
+  document.getElementById('travel-info-status').textContent = data.status;
+
+  document.getElementById('travel-info-content').innerHTML =
+    `<div class="travel-info-title">${data.icon} ${data.title}</div>` +
+    data.content.replace(/\n/g,'<br>') +
+    `<div class="travel-info-btn-row">
+      <button class="travel-info-btn" onclick="closeWindow('travel-info-win')">關閉</button>
+    </div>`;
+
+  openWindow('travel-info-win');
+}
+
+</script>
+</body>
+</html>
